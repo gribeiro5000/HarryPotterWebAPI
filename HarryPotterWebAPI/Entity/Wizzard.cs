@@ -10,7 +10,7 @@ namespace HarryPotterWebAPI.Entity
         public int Id { get; set; }
         public string Name { get; set; }
         public Gender Gender { get; set; }
-        //public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public int YearOfBirth { get; set; }
         public Colour EyeColour { get; set; }
         public Colour HairColour { get; set; }
