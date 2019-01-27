@@ -8,6 +8,13 @@ namespace HarryPotterWebAPI.Repository
 {
     public class BaseRepository
     {
-        protected string connectionString { get { return ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; } }
+        protected string connectionString
+        {
+            get
+            {
+                //return Helpers.Utils.GetConnectionString("ConnectionString");
+                return Helpers.Utils.GetRelativeConnectionString("LocalConnectionString");
+            }
+        }
     }
 }

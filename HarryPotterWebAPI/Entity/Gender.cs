@@ -5,9 +5,9 @@ using System.Web;
 
 namespace HarryPotterWebAPI.Entity
 {
-    public enum Gender
+    public class Gender
     {
-        Male = 1,
-        Female = 2
+        public int Id { get; set; }
+        public string Identifier { get; set; }
     }
 }

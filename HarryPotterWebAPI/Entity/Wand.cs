@@ -8,8 +8,8 @@ namespace HarryPotterWebAPI.Entity
     public class Wand
     {
         public int Id { get; set; }
-        public int WoodMaterial { get; set; }
-        public int CoreMaterial { get; set; }
+        public Material WoodMaterial { get; set; }
+        public Material CoreMaterial { get; set; }
         public double Length { get; set; }
     }
 }

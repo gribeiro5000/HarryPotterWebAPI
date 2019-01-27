@@ -17,7 +17,7 @@ namespace HarryPotterWebAPI.Models
         public string Ancestry { get; set; }
         public string EyeColour { get; set; }
         public string HairColour { get; set; }
-        public WandModel WandModel { get; set; }
+        public WandModel Wand { get; set; }
         public string Patronus { get; set; }
         public bool HogwartsStudent { get; set; }
         public bool HogwartsStaff { get; set; }

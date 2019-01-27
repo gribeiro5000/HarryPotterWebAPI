@@ -17,34 +17,33 @@ namespace HarryPotterWebAPI.Controllers
         public IHttpActionResult Get()
         {
             List<Wizzard> wizzards = wizzardRepository.Get();
-            //List<WizzardModel> wizzardModels = new List<WizzardModel>();
-            //for (int i = 0; i < wizzards.Count(); i++)
-            //{
-            //    WizzardModel wizzardModel = new WizzardModel();
-            //    wizzardModel.Id = wizzards[i].Id;
-            //    wizzardModel.Name = wizzards[i].Name;
-            //    wizzardModel.Species = wizzards[i].Species;
-            //    wizzardModel.Gender = wizzards[i].Gender;
-            //    wizzardModel.House = wizzards[i].House;
-            //    wizzardModel.DateOfBirth = wizzards[i].DateOfBirth;
-            //    wizzardModel.YearOfBirth = wizzards[i].YearOfBirth;
-            //    wizzardModel.Ancestry = wizzards[i].Ancestry;
-            //    wizzardModel.EyeColour = wizzards[i].EyeColour;
-            //    wizzardModel.HairColour = wizzards[i].HairColour;
-            //    wizzardModel.WandModel.Id = wizzards[i].Wand.Id;
-            //    wizzardModel.WandModel.WoodMaterial = wizzards[i].Wand.WoodMaterial;
-            //    wizzardModel.WandModel.CoreMaterial = wizzards[i].Wand.CoreMaterial;
-            //    wizzardModel.WandModel.Length = wizzards[i].Wand.Length;
-            //    wizzardModel.Patronus = wizzards[i].Patronus;
-            //    wizzardModel.HogwartsStudent = wizzards[i].HogwartsStudent;
-            //    wizzardModel.HogwartsStaff = wizzards[i].HogwartsStaff;
-            //    wizzardModel.Actor = wizzards[i].Actor;
-            //    wizzardModel.Alive = wizzards[i].Alive;
-            //    wizzardModel.Image = wizzards[i].Image;
-            //
-            //    wizzardModels.Add(wizzardModel);
-            //}
-            return Json(wizzards);
+            List<WizzardModel> wizzardModels = new List<WizzardModel>();
+            foreach (Wizzard wizzard in wizzards)
+            {
+                WizzardModel wizzardModel = new WizzardModel();
+                wizzardModel.Id = wizzard.Id;
+                wizzardModel.Name = wizzard.Name;
+                wizzardModel.Species = wizzard.Species.Identifier;
+                wizzardModel.Gender = wizzard.Gender.Identifier;
+                wizzardModel.House = wizzard.House.Identifier;
+                wizzardModel.DateOfBirth = wizzard.DateOfBirth;
+                wizzardModel.YearOfBirth = wizzard.YearOfBirth;
+                wizzardModel.Ancestry = wizzard.Ancestry.Identifier;
+                wizzardModel.EyeColour = wizzard.EyeColour.Identifier;
+                wizzardModel.HairColour = wizzard.HairColour.Identifier;
+                wizzardModel.Wand.WoodMaterial = wizzard.Wand.WoodMaterial.Identifier;
+                wizzardModel.Wand.CoreMaterial = wizzard.Wand.CoreMaterial.Identifier;
+                wizzardModel.Wand.Length = wizzard.Wand.Length;
+                wizzardModel.Patronus = wizzard.Patronus.Identifier;
+                wizzardModel.HogwartsStudent = wizzard.HogwartsStudent;
+                wizzardModel.HogwartsStaff = wizzard.HogwartsStaff;
+                wizzardModel.Actor = wizzard.Actor;
+                wizzardModel.Alive = wizzard.Alive;
+                wizzardModel.Image = wizzard.Image;
+
+                wizzardModels.Add(wizzardModel);
+            }
+            return Json(wizzardModels);
         }
     }
 }

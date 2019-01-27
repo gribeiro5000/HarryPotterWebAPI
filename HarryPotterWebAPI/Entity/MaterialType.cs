@@ -5,9 +5,9 @@ using System.Web;
 
 namespace HarryPotterWebAPI.Entity
 {
-    public enum MaterialType
+    public class MaterialType
     {
-        Wood = 1,
-        Core = 2
+        public int Id { get; set; }
+        public string Identifier { get; set; }
     }
 }

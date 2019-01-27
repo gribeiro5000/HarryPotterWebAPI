@@ -9,6 +9,6 @@ namespace HarryPotterWebAPI.Entity
     {
         public int Id { get; set; }
         public string Identifier { get; set; }
-        public MaterialType MaterialTypeId { get; set; }
+        public MaterialType MaterialType { get; set; }
     }
 }
