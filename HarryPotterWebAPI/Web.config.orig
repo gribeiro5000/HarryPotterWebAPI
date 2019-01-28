@@ -67,7 +67,12 @@
     </DbProviderFactories>
   </system.data>
   <connectionStrings>
-    <add name="ConnectionString" connectionString="data source=C:\Users\gribe\Documents\coisas Gabriel\databases\HarryPotter.db" />    
+<<<<<<< HEAD
+      <add name="ConnectionString" connectionString="data source=C:\Users\gribe\Documents\coisas Gabriel\databases\HarryPotter.db" />
       <add name="LocalConnectionString" connectionString="data source=|DataDirectory|\database\HarryPotter.db" />
+=======
+    <add name="ConnectionString" connectionString="data source=C:\Users\gribe\Documents\coisas Gabriel\databases\HarryPotter.db" />    
+    <add name="LocalConnectionString" connectionString="data source=|DataDirectory|\database\HarryPotter.db" />
+>>>>>>> 793ed7cef936eca7d7ea01ca7490a4136f1e6409
   </connectionStrings>
 </configuration>

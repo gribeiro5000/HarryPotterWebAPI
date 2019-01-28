@@ -12,15 +12,29 @@ namespace HarryPotterWebAPI.Repository
     {
         public List<Wizzard> Get()
         {
+<<<<<<< HEAD
             string sqLite = "SELECT * FROM Wizzard " +
-                              LEFT JOIN patronus on wizzard.PatronusId = patronus.Id;";
+                "JOIN species on wizzard.SpeciesId = species.Id " +
                 "JOIN Gender on wizzard.GenderId = Gender.Id " +
+                "JOIN house on wizzard.HouseId = house.Id " +
+                "JOIN ancestry on wizzard.AncestryId = ancestry.Id " +
                 "JOIN Colour c on wizzard.EyeColourId = c.Id " +
                 "JOIN Colour c2 on wizzard.HairColourId = c2.Id " +
+                "JOIN wand on wizzard.WandId = wand.Id " +
                 "JOIN Material m1 on Wand.WoodMaterialId = M1.Id " +
                 "JOIN MaterialType mt1 on m1.MaterialTypeId = mt1.Id " +
                 "JOIN Material m2 on Wand.CoreMaterialId = M2.Id " +
                 "JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id " +
+                "JOIN patronus on wizzard.PatronusId = patronus.Id;";
+=======
+            string sqLite = @"SELECT *
+                              FROM Wizzard
+                              LEFT JOIN species on wizzard.SpeciesId = species.Id
+                              LEFT JOIN house on wizzard.HouseId = house.Id
+                              LEFT JOIN ancestry on wizzard.AncestryId = ancestry.Id
+                              LEFT JOIN wand on wizzard.WandId = wand.Id
+                              LEFT JOIN patronus on wizzard.PatronusId = patronus.Id;";
+>>>>>>> 793ed7cef936eca7d7ea01ca7490a4136f1e6409
             var connection = new SQLiteConnection(connectionString);
             List<Wizzard> wizzards = connection.Query<Wizzard>
                 (sqLite,
