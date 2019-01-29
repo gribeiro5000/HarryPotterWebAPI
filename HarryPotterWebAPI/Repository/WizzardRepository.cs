@@ -12,15 +12,17 @@ namespace HarryPotterWebAPI.Repository
     {
         public List<Wizzard> Get()
         {
-            string sqLite = "SELECT * FROM Wizzard " +
-                              LEFT JOIN patronus on wizzard.PatronusId = patronus.Id;";
-                "JOIN Gender on wizzard.GenderId = Gender.Id " +
-                "JOIN Colour c on wizzard.EyeColourId = c.Id " +
-                "JOIN Colour c2 on wizzard.HairColourId = c2.Id " +
-                "JOIN Material m1 on Wand.WoodMaterialId = M1.Id " +
-                "JOIN MaterialType mt1 on m1.MaterialTypeId = mt1.Id " +
-                "JOIN Material m2 on Wand.CoreMaterialId = M2.Id " +
-                "JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id " +
+            string sqLite = @"SELECT * FROM Wizzard
+                            JOIN patronus on wizzard.PatronusId = patronus.Id
+                            JOIN Gender on wizzard.GenderId = Gender.Id
+                            JOIN Colour c on wizzard.EyeColourId = c.Id
+                            JOIN Colour c2 on wizzard.HairColourId = c2.Id
+                            JOIN Wand on wizzard.WandId = Wand.Id
+                            JOIN Material m1 on Wand.WoodMaterialId = M1.Id
+                            JOIN MaterialType mt1 on m1.MaterialTypeId = mt1.Id
+                            JOIN Material m2 on Wand.CoreMaterialId = M2.Id
+                            JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id";
+
             var connection = new SQLiteConnection(connectionString);
             List<Wizzard> wizzards = connection.Query<Wizzard>
                 (sqLite,
