@@ -9,6 +9,6 @@ namespace HarryPotterWebAPI.Models
     {
         public string WoodMaterial { get; set; }
         public string CoreMaterial { get; set; }
-        public double Length { get; set; }
+        public double? Length { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace HarryPotterWebAPI.Entity
         public int Id { get; set; }
         public Material WoodMaterial { get; set; }
         public Material CoreMaterial { get; set; }
-        public double Length { get; set; }
+        public double? Length { get; set; }
     }
 }

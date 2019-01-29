@@ -13,18 +13,18 @@ namespace HarryPotterWebAPI.Repository
         public List<Wizzard> Get()
         {
             string sqLite = @"SELECT * FROM Wizzard
-                           JOIN Species on wizzard.SpeciesId = Species.Id
-                           JOIN Gender on wizzard.GenderId = Gender.Id
-                           JOIN House on wizzard.HouseId = House.Id
-                           JOIN Ancestry on wizzard.AncestryId = Ancestry.Id
-                           JOIN Colour c on wizzard.EyeColourId = c.Id
-                           JOIN Colour c2 on wizzard.HairColourId = c2.Id
-                           JOIN Wand on wizzard.WandId = Wand.Id
-                           JOIN Material m1 on Wand.WoodMaterialId = M1.Id
-                           JOIN MaterialType mt1 on m1.MaterialTypeId = mt1.Id
-                           JOIN Material m2 on Wand.CoreMaterialId = M2.Id
-                           JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id
-                           JOIN patronus on wizzard.PatronusId = Patronus.Id";
+                           LEFT JOIN Species on wizzard.SpeciesId = Species.Id
+                           LEFT JOIN Gender on wizzard.GenderId = Gender.Id
+                           LEFT JOIN House on wizzard.HouseId = House.Id
+                           LEFT JOIN Ancestry on wizzard.AncestryId = Ancestry.Id
+                           LEFT JOIN Colour c on wizzard.EyeColourId = c.Id
+                           LEFT JOIN Colour c2 on wizzard.HairColourId = c2.Id
+                           LEFT JOIN Wand on wizzard.WandId = Wand.Id
+                           LEFT JOIN Material m1 on Wand.WoodMaterialId = M1.Id
+                           LEFT JOIN MaterialType mt1 on m1.MaterialTypeId = mt1.Id
+                           LEFT JOIN Material m2 on Wand.CoreMaterialId = M2.Id
+                           LEFT JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id
+                           LEFT JOIN patronus on wizzard.PatronusId = Patronus.Id";
 
             var connection = new SQLiteConnection(connectionString);
             List<Wizzard> wizzards = connection.Query<Wizzard>
@@ -68,10 +68,16 @@ namespace HarryPotterWebAPI.Repository
                     wizzard.EyeColour = eyeColour;
                     wizzard.HairColour = hairColour;
                     wizzard.Wand = wand;
-                    wand.WoodMaterial = woodMaterial;
-                    woodMaterial.MaterialType = mt1;
-                    wand.CoreMaterial = coreMaterial;
-                    coreMaterial.MaterialType = mt2;
+                    if (wand != null)
+                    {
+                        wand.WoodMaterial = woodMaterial;
+                        if (woodMaterial != null)
+                            wand.WoodMaterial.MaterialType = mt1;
+
+                        wand.CoreMaterial = coreMaterial;
+                        if (coreMaterial != null)
+                            wand.CoreMaterial.MaterialType = mt2;
+                    }
                     wizzard.Patronus = patronus;
 
                     return wizzard;
