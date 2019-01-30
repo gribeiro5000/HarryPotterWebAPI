@@ -86,5 +86,27 @@ namespace HarryPotterWebAPI.Repository
 
             return wizzards;
         }
+
+        public Wizzard GetById(int id)
+        {
+            string sqLite = @"select * from Wizzard 
+                            left join Species on Wizzard.SpeciesId = Species.Id
+                            left join Gender on Wizzard.GenderId = Gender.Id
+                            left join House on Wizzard.HouseId = House.Id
+                            left join Ancestry on Wizzard.AncestryId = Ancestry.Id
+                            left join Colour eye on Wizzard.EyeColourId = eye.Id
+                            left join Colour hair on Wizzard.HairColourId = hair.Id
+                            left join Wand on Wizzard.WandId = Wand.Id
+                            left join Material mWood on Wand.WoodMaterialId = mWood.Id
+                            left join MaterialType mtWood on mWood.MaterialTypeId = mtWood.Id
+                            left join Material mCore on Wand.CoreMaterialId = mCore.Id
+                            left join MaterialType mtCore on mCore.MaterialTypeId = mtCore.Id
+                            left join Patronus on Wizzard.PatronusId = Patronus.Id
+                            and Wizzard.Id = @wizzardId ;";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            Wizzard wizzard = connection.QueryFirstOrDefault<Wizzard>(sqLite, new { wizzardId = id });
+
+            return wizzard;
+        }
     }
 }

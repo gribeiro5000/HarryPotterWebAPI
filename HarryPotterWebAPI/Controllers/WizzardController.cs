@@ -46,5 +46,34 @@ namespace HarryPotterWebAPI.Controllers
             }
             return Json(wizzardModels);
         }
+
+        public IHttpActionResult GetById (int id)
+        {
+            Wizzard wizzard = wizzardRepository.GetById(id);
+            WizzardModel wizzardModel = new WizzardModel();
+            wizzardModel.Wand = new WandModel();
+
+            wizzardModel.Id = wizzard.Id;
+            wizzardModel.Name = wizzard.Name;
+            wizzardModel.Species = wizzard.Species?.Identifier;
+            wizzardModel.Gender = wizzard.Gender?.Identifier;
+            wizzardModel.House = wizzard.House?.Identifier;
+            wizzardModel.DateOfBirth = wizzard.DateOfBirth;
+            wizzardModel.YearOfBirth = wizzard.YearOfBirth;
+            wizzardModel.Ancestry = wizzard.Ancestry?.Identifier;
+            wizzardModel.EyeColour = wizzard.EyeColour?.Identifier;
+            wizzardModel.HairColour = wizzard.HairColour?.Identifier;
+            wizzardModel.Wand.WoodMaterial = wizzard.Wand?.WoodMaterial?.Identifier;
+            wizzardModel.Wand.CoreMaterial = wizzard.Wand?.CoreMaterial?.Identifier;
+            wizzardModel.Wand.Length = wizzard.Wand?.Length;
+            wizzardModel.Patronus = wizzard.Patronus?.Identifier;
+            wizzardModel.HogwartsStudent = wizzard.HogwartsStudent;
+            wizzardModel.HogwartsStaff = wizzard.HogwartsStaff;
+            wizzardModel.Actor = wizzard.Actor;
+            wizzardModel.Alive = wizzard.Alive;
+            wizzardModel.Image = wizzard.Image;
+
+            return Json(wizzardModel);
+        }
     }
 }
