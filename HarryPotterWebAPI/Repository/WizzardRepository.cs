@@ -26,7 +26,7 @@ namespace HarryPotterWebAPI.Repository
                            LEFT JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id
                            LEFT JOIN patronus on wizzard.PatronusId = Patronus.Id";
 
-            var connection = new SQLiteConnection(connectionString);
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
             List<Wizzard> wizzards = connection.Query<Wizzard>
                 (sqLite,
                 new[]
