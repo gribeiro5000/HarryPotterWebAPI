@@ -102,9 +102,64 @@ namespace HarryPotterWebAPI.Repository
                             left join Material mCore on Wand.CoreMaterialId = mCore.Id
                             left join MaterialType mtCore on mCore.MaterialTypeId = mtCore.Id
                             left join Patronus on Wizzard.PatronusId = Patronus.Id
-                            and Wizzard.Id = @wizzardId ;";
+                            where Wizzard.Id = " + id + ";";
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            Wizzard wizzard = connection.QueryFirstOrDefault<Wizzard>(sqLite, new { wizzardId = id });
+            Wizzard wizzard = connection.Query<Wizzard>
+                (sqLite, 
+                new[] 
+                {
+                    typeof(Wizzard),
+                    typeof(Species),
+                    typeof(Gender),
+                    typeof(House),
+                    typeof(Ancestry),
+                    typeof(Colour),
+                    typeof(Colour),
+                    typeof(Wand),
+                    typeof(Material),
+                    typeof(MaterialType),
+                    typeof(Material),
+                    typeof(MaterialType),
+                    typeof(Patronus)
+                }
+                , objects =>
+                {
+                    Wizzard _wizzard = objects[0] as Wizzard;
+                    Species species = objects[1] as Species;
+                    Gender gender = objects[2] as Gender;
+                    House house = objects[3] as House;
+                    Ancestry ancestry = objects[4] as Ancestry;
+                    Colour eyeColour = objects[5] as Colour;
+                    Colour hairColour = objects[6] as Colour;
+                    Wand wand = objects[7] as Wand;
+                    Material woodMaterial = objects[8] as Material;
+                    MaterialType mt1 = objects[9] as MaterialType;
+                    Material coreMaterial = objects[10] as Material;
+                    MaterialType mt2 = objects[11] as MaterialType;
+                    Patronus patronus = objects[12] as Patronus;
+
+                    _wizzard.Species = species;
+                    _wizzard.Gender = gender;
+                    _wizzard.House = house;
+                    _wizzard.Ancestry = ancestry;
+                    _wizzard.EyeColour = eyeColour;
+                    _wizzard.HairColour = hairColour;
+                    _wizzard.Wand = wand;
+                    if (wand != null)
+                    {
+                        wand.WoodMaterial = woodMaterial;
+                        if (woodMaterial != null)
+                            wand.WoodMaterial.MaterialType = mt1;
+
+                        wand.CoreMaterial = coreMaterial;
+                        if (coreMaterial != null)
+                            wand.CoreMaterial.MaterialType = mt2;
+                    }
+                    _wizzard.Patronus = patronus;
+
+                    return _wizzard;
+                },
+                splitOn: "Id,Id,Id,Id,Id,Id,Id,Id,Id,Id,Id,Id").FirstOrDefault();
 
             return wizzard;
         }

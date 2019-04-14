@@ -18,6 +18,7 @@ namespace HarryPotterWebAPI.Controllers
         {
             List<Wizzard> wizzards = wizzardRepository.Get();
             List<WizzardModel> wizzardModels = new List<WizzardModel>();
+
             foreach (Wizzard wizzard in wizzards)
             {
                 WizzardModel wizzardModel = new WizzardModel();
@@ -41,7 +42,7 @@ namespace HarryPotterWebAPI.Controllers
                 wizzardModel.Actor = wizzard.Actor;
                 wizzardModel.Alive = wizzard.Alive;
                 wizzardModel.Image = wizzard.Image;
-
+                
                 wizzardModels.Add(wizzardModel);
             }
             return Json(wizzardModels);
