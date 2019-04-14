@@ -11,5 +11,6 @@ namespace HarryPotterWebAPI.Entity
         public Material WoodMaterial { get; set; }
         public Material CoreMaterial { get; set; }
         public double? Length { get; set; }
+        public string Wizzard { get; set; }
     }
 }
