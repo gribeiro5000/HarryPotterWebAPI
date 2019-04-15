@@ -25,7 +25,8 @@ namespace HarryPotterWebAPI.Controllers
                 wandModel.Id = wand.Id;
                 wandModel.CoreMaterial = wand.CoreMaterial?.Identifier;
                 wandModel.WoodMaterial = wand.WoodMaterial?.Identifier;
-                wandModel.Wizzard = wand.Wizzard;
+                wandModel.Length = wand.Length;
+                wandModel.Wizzard = wand.Wizzard.Name;
 
                 wandModels.Add(wandModel);
             }
@@ -41,7 +42,8 @@ namespace HarryPotterWebAPI.Controllers
             wandModel.Id = wand.Id;
             wandModel.CoreMaterial = wand.CoreMaterial?.Identifier;
             wandModel.WoodMaterial = wand.WoodMaterial?.Identifier;
-            wandModel.Wizzard = wand.Wizzard;
+            wandModel.Length = wand.Length;
+            wandModel.Wizzard = wand.Wizzard.Name;
 
             return Json(wandModel);
         }

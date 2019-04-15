@@ -33,6 +33,7 @@ namespace HarryPotterWebAPI.Controllers
                 wizzardModel.Ancestry = wizzard.Ancestry?.Identifier;
                 wizzardModel.EyeColour = wizzard.EyeColour?.Identifier;
                 wizzardModel.HairColour = wizzard.HairColour?.Identifier;
+                wizzardModel.Wand.Id = wizzard.Wand?.Id;
                 wizzardModel.Wand.WoodMaterial = wizzard.Wand?.WoodMaterial?.Identifier;
                 wizzardModel.Wand.CoreMaterial = wizzard.Wand?.CoreMaterial?.Identifier;
                 wizzardModel.Wand.Length = wizzard.Wand?.Length;
@@ -64,6 +65,7 @@ namespace HarryPotterWebAPI.Controllers
             wizzardModel.Ancestry = wizzard.Ancestry?.Identifier;
             wizzardModel.EyeColour = wizzard.EyeColour?.Identifier;
             wizzardModel.HairColour = wizzard.HairColour?.Identifier;
+            wizzardModel.Wand.Id = wizzard.Wand?.Id;
             wizzardModel.Wand.WoodMaterial = wizzard.Wand?.WoodMaterial?.Identifier;
             wizzardModel.Wand.CoreMaterial = wizzard.Wand?.CoreMaterial?.Identifier;
             wizzardModel.Wand.Length = wizzard.Wand?.Length;

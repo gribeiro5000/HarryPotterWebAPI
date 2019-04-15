@@ -12,24 +12,28 @@ namespace HarryPotterWebAPI.Repository
     {
         public List<Wand> Get()
         {
-            string sqlite = @"select Wand.Id, Wand.WoodMaterialId, Wand.CoreMaterialId,
-                            Wand.Length,m1.Id, m1.Identifier, mt1.Id, mt1.Identifier,
-                            m2.Id, m2.Identifier, mt2.Id, mt2.Identifier, Wizzard.Name 
-                            from wand
+            string sqlite = @"select * from wand
                             left join Material m1 on wand.WoodMaterialId = m1.Id
                             left join MaterialType mt1 on m1.MaterialTypeId = mt1.Id
                             left join Material m2 on wand.CoreMaterialId = m2.Id
                             left join MaterialType mt2 on m2.MaterialTypeId = mt2.Id
                             left join Wizzard on wand.Id = Wizzard.WandId;";
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            List<Wand> wands = connection.Query<Wand, Material, MaterialType, Material, MaterialType, Wand>
+            List<Wand> wands = connection.Query<Wand, Material, MaterialType, Material, MaterialType, Wizzard, Wand>
                 (sqlite,
-                (wand, woodMaterial, woodMaterialType, coreMaterial, coreMaterialTyp) =>
+                (wand, woodMaterial, woodMaterialType, coreMaterial, coreMaterialType, wizzard) =>
                 {
                     wand.WoodMaterial = woodMaterial;
-                    wand.WoodMaterial.MaterialType = woodMaterialType;
+                    if (wand.WoodMaterial != null)
+                    {
+                        wand.WoodMaterial.MaterialType = woodMaterialType;
+                    }
                     wand.CoreMaterial = coreMaterial;
-                    wand.CoreMaterial.MaterialType = coreMaterialTyp;
+                    if (wand.CoreMaterial != null)
+                    {
+                        wand.CoreMaterial.MaterialType = coreMaterialType;
+                    }
+                    wand.Wizzard = wizzard;
 
                     return wand;
                 },
@@ -40,19 +44,35 @@ namespace HarryPotterWebAPI.Repository
 
         public Wand GetById(int id)
         {
-            string sqlite = @"select Wand.Id, Wand.WoodMaterialId, Wand.CoreMaterialId,
-                            Wand.Length, m1.Identifier, mt1.Identifier,
-                            m2.Identifier, mt2.Identifier, Wizzard.Name from wand
+            string sqlite = @"select * from wand
                             left join Material m1 on wand.WoodMaterialId = m1.Id
                             left join MaterialType mt1 on m1.MaterialTypeId = mt1.Id
                             left join Material m2 on wand.CoreMaterialId = m2.Id
                             left join MaterialType mt2 on m2.MaterialTypeId = mt2.Id
                             left join Wizzard on wand.Id = Wizzard.WandId
-                            where id = " + id + ";";
+                            where wand.id = " + id + ";";
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            Wand wand = connection.Query<Wand>(sqlite).FirstOrDefault();
+            Wand Wand = connection.Query<Wand, Material, MaterialType, Material, MaterialType, Wizzard, Wand>
+                (sqlite,
+                (wand, woodMaterial, woodMaterialType, coreMaterial, coreMaterialType, wizzard) =>
+                {
+                    wand.WoodMaterial = woodMaterial;
+                    if (wand.WoodMaterial != null)
+                    {
+                        wand.WoodMaterial.MaterialType = woodMaterialType;
+                    }
+                    wand.CoreMaterial = coreMaterial;
+                    if (wand.CoreMaterial != null)
+                    {
+                        wand.CoreMaterial.MaterialType = coreMaterialType;
+                    }
+                    wand.Wizzard = wizzard;
 
-            return wand;
+                    return wand;
+                },
+                splitOn: "Id,Id,Id,Id,Id").Distinct().FirstOrDefault();
+
+            return Wand;
         }
     }
 }
