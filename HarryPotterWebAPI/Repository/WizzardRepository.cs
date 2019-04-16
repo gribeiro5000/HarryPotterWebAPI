@@ -180,15 +180,15 @@ namespace HarryPotterWebAPI.Repository
                    sqlite += " UNION ";
                    sqlite += "select * from Patronus where Patronus.Identifier = '" + wizzard.Patronus.Identifier + "';";
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            dynamic wizzardData = connection.Query(sqlite);
+            var wizzardData = connection.Query(sqlite);
 
-            wizzard.Species.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Species.Identifier);
-            wizzard.Gender.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Gender.Identifier);
-            wizzard.House.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.House.Identifier);
-            wizzard.Ancestry.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Ancestry.Identifier);
-            wizzard.HairColour.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.HairColour.Identifier);
-            wizzard.EyeColour.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.EyeColour.Identifier);
-            wizzard.Patronus.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Patronus.Identifier);
+            wizzard.Species.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Species.Identifier).FirstOrDefault()?.Id);
+            wizzard.Gender.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Gender.Identifier).FirstOrDefault()?.Id);
+            wizzard.House.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.House.Identifier).FirstOrDefault()?.Id);
+            wizzard.Ancestry.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Ancestry.Identifier).FirstOrDefault()?.Id);
+            wizzard.HairColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.HairColour.Identifier).FirstOrDefault()?.Id);
+            wizzard.EyeColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.EyeColour.Identifier).FirstOrDefault()?.Id);
+            wizzard.Patronus.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Patronus.Identifier).FirstOrDefault()?.Id);
         }
     }
 }
