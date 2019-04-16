@@ -166,29 +166,21 @@ namespace HarryPotterWebAPI.Repository
 
         public void Insert(Wizzard wizzard)
         {
-            string sqlite = @"select * from Species where Species.Identifier = '@wizzardSpecies' 
-                            UNION
-                            select * from Gender where gender.Identifier = '@wizzardGender'
-                            UNION
-                            select * from House where House.Identifier = '@wizzardHouse'
-                            UNION
-                            select * from Ancestry where Ancestry.Identifier = '@wizzardAncestry'
-                            UNION
-                            select * from colour where colour.Identifier = '@wizzardHairColour'
-                            UNION
-                            select * from colour where colour.Identifier = '@wizzardEyeColour' 
-                            UNION
-                            select * from Patronus where Patronus.Identifier = '@wizzardPatronus';";
+            string sqlite = "select * from Species where Species.Identifier = '" + wizzard.Species.Identifier + "'";
+                   sqlite += " UNION ";
+                   sqlite += "select * from Gender where gender.Identifier = '" + wizzard.Gender.Identifier + "' ";
+                   sqlite += " UNION ";
+                   sqlite += "select * from House where House.Identifier = '" + wizzard.House.Identifier + "' ";
+                   sqlite += " UNION ";
+                   sqlite += "select * from Ancestry where Ancestry.Identifier = '" + wizzard.Ancestry.Identifier + "' ";
+                   sqlite += " UNION ";
+                   sqlite += "select * from colour where colour.Identifier = '" + wizzard.HairColour.Identifier + "' ";
+                   sqlite += " UNION ";
+                   sqlite += "select * from colour where colour.Identifier = '" + wizzard.EyeColour.Identifier + "' ";
+                   sqlite += " UNION ";
+                   sqlite += "select * from Patronus where Patronus.Identifier = '" + wizzard.Patronus.Identifier + "';";
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            dynamic wizzardData = connection.Query(sqlite, 
-                new { wizzardSpecies = wizzard.Species.Identifier,
-                    wizzardGender = wizzard.Gender.Identifier,
-                    wizzardHouse = wizzard.House.Identifier,
-                    wizzardAncestry = wizzard.Ancestry.Identifier,
-                    wizzardHairColour = wizzard.HairColour.Identifier,
-                    wizzardEyeColour = wizzard.EyeColour.Identifier,
-                    wizzardPatronus = wizzard.Patronus.Identifier
-                }).ToList();
+            dynamic wizzardData = connection.Query(sqlite);
 
             wizzard.Species.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Species.Identifier);
             wizzard.Gender.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Gender.Identifier);
