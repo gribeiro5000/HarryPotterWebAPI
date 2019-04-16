@@ -163,5 +163,40 @@ namespace HarryPotterWebAPI.Repository
 
             return wizzard;
         }
+
+        public void Insert(Wizzard wizzard)
+        {
+            string sqlite = @"select * from Species where Species.Identifier = '@wizzardSpecies' 
+                            UNION
+                            select * from Gender where gender.Identifier = '@wizzardGender'
+                            UNION
+                            select * from House where House.Identifier = '@wizzardHouse'
+                            UNION
+                            select * from Ancestry where Ancestry.Identifier = '@wizzardAncestry'
+                            UNION
+                            select * from colour where colour.Identifier = '@wizzardHairColour'
+                            UNION
+                            select * from colour where colour.Identifier = '@wizzardEyeColour' 
+                            UNION
+                            select * from Patronus where Patronus.Identifier = '@wizzardPatronus';";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            dynamic wizzardData = connection.Query(sqlite, 
+                new { wizzardSpecies = wizzard.Species.Identifier,
+                    wizzardGender = wizzard.Gender.Identifier,
+                    wizzardHouse = wizzard.House.Identifier,
+                    wizzardAncestry = wizzard.Ancestry.Identifier,
+                    wizzardHairColour = wizzard.HairColour.Identifier,
+                    wizzardEyeColour = wizzard.EyeColour.Identifier,
+                    wizzardPatronus = wizzard.Patronus.Identifier
+                }).ToList();
+
+            wizzard.Species.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Species.Identifier);
+            wizzard.Gender.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Gender.Identifier);
+            wizzard.House.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.House.Identifier);
+            wizzard.Ancestry.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Ancestry.Identifier);
+            wizzard.HairColour.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.HairColour.Identifier);
+            wizzard.EyeColour.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.EyeColour.Identifier);
+            wizzard.Patronus.Id = wizzardData.Id.where(wizzardData.Identifier == wizzard.Patronus.Identifier);
+        }
     }
 }

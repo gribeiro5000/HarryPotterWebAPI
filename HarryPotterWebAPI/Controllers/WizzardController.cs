@@ -78,5 +78,36 @@ namespace HarryPotterWebAPI.Controllers
 
             return Json(wizzardModel);
         }
+
+        public void Post([FromBody] WizzardModel wizzardModel)
+        {
+            Wizzard wizzard = new Wizzard();
+            wizzard.Species = new Species();
+            wizzard.Gender = new Gender();
+            wizzard.House = new House();
+            wizzard.Ancestry = new Ancestry();
+            wizzard.EyeColour = new Colour();
+            wizzard.HairColour = new Colour();
+            wizzard.Patronus = new Patronus();
+
+            wizzard.Name = wizzardModel.Name;
+            wizzard.Species.Identifier = wizzardModel.Species;
+            wizzard.Gender.Identifier = wizzardModel.Gender;
+            wizzard.House.Identifier = wizzardModel.House;
+            wizzard.DateOfBirth = wizzardModel.DateOfBirth;
+            wizzard.YearOfBirth = wizzardModel.YearOfBirth;
+            wizzard.Ancestry.Identifier = wizzardModel.Ancestry;
+            wizzard.EyeColour.Identifier = wizzardModel.EyeColour;
+            wizzard.HairColour.Identifier = wizzardModel.HairColour;
+            //wizzard.Wand.
+            wizzard.Patronus.Identifier = wizzardModel.Patronus;
+            wizzard.HogwartsStudent = wizzardModel.HogwartsStudent;
+            wizzard.HogwartsStaff = wizzardModel.HogwartsStaff;
+            wizzard.Actor = wizzardModel.Actor;
+            wizzard.Alive = wizzardModel.Alive;
+            wizzard.Image = wizzardModel.Image;
+
+            wizzardRepository.Insert(wizzard);
+        }
     }
 }
