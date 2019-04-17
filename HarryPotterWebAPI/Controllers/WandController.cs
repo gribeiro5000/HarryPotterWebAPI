@@ -16,6 +16,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Get()
         {
+
             List<Wand> wands = wandRepository.Get();
             List<WandModel> wandModels = new List<WandModel>();
 
@@ -26,7 +27,7 @@ namespace HarryPotterWebAPI.Controllers
                 wandModel.CoreMaterial = wand.CoreMaterial?.Identifier;
                 wandModel.WoodMaterial = wand.WoodMaterial?.Identifier;
                 wandModel.Length = wand.Length;
-                wandModel.Wizzard = wand.Wizzard.Name;
+                wandModel.Wizzard = wand.Wizzard?.Name;
 
                 wandModels.Add(wandModel);
             }
@@ -46,6 +47,19 @@ namespace HarryPotterWebAPI.Controllers
             wandModel.Wizzard = wand.Wizzard.Name;
 
             return Json(wandModel);
+        }
+
+        public void Post(WandModel wandModel)
+        {
+            Wand wand = new Wand();
+            wand.WoodMaterial = new Material();
+            wand.CoreMaterial = new Material();
+
+            wand.CoreMaterial.Identifier = wandModel.CoreMaterial;
+            wand.WoodMaterial.Identifier = wandModel.WoodMaterial;
+            wand.Length = wandModel.Length;
+
+            wandRepository.Insert(wand);
         }
     }
 }

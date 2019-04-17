@@ -74,5 +74,28 @@ namespace HarryPotterWebAPI.Repository
 
             return Wand;
         }
+
+        public void Insert(Wand wand)
+        {
+            string sqlite = "select * from Material where Material.Identifier = '" + wand.WoodMaterial.Identifier + "' ";
+                    sqlite += "union ";
+                    sqlite += "select* from Material where Material.Identifier = '" + wand.CoreMaterial.Identifier + "';";
+
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            var wandData = connection.Query(sqlite);
+
+            wand.WoodMaterial.Id = Convert.ToInt32(wandData.Where(x => x.Identifier == wand.WoodMaterial.Identifier).FirstOrDefault()?.Id);
+            wand.CoreMaterial.Id = Convert.ToInt32(wandData.Where(x => x.Identifier == wand.CoreMaterial.Identifier).FirstOrDefault()?.Id);
+
+            sqlite = @"insert into Wand (WoodMaterialId, CoreMaterialId, Length)
+                        values (@woodMaterialId, @coreMaterialId, @length)";
+
+            connection.Execute(sqlite, new
+            {
+                woodMaterialId = wand.WoodMaterial.Id,
+                coreMaterialId = wand.CoreMaterial.Id,
+                length = wand.Length
+            });
+        }
     }
 }
