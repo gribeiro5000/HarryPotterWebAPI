@@ -189,6 +189,36 @@ namespace HarryPotterWebAPI.Repository
             wizzard.HairColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.HairColour.Identifier).FirstOrDefault()?.Id);
             wizzard.EyeColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.EyeColour.Identifier).FirstOrDefault()?.Id);
             wizzard.Patronus.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Patronus.Identifier).FirstOrDefault()?.Id);
+            
+            sqlite = @"insert into Wizzard (Name, SpeciesId, GenderId, HouseId, 
+                       DateOfBirth, YearOfBirth, AncestryId, EyeColourId, 
+                       HairColourId, WandId, PatronusId, HogwartsStudent, 
+                       HogwartsStaff, Actor, Alive, Image)
+                       values(@Name, @speciesId, @GenderId, @HouseId, @DateOfBirth, @YearOfBirth, 
+                        @ancestryId, @eyeColourId, @hairColourId, @wandId, @patronusId, @hogwartsStudent, 
+                        @hogwartsStaff, @actor, @alive, @image);";
+
+            connection.Execute(sqlite,
+                new
+                {
+                    Id = wizzard.Id,
+                    Name = wizzard.Name,
+                    speciesId = wizzard.Species.Id,
+                    GenderId = wizzard.Gender.Id,
+                    HouseId = wizzard.House.Id,
+                    DateOfBirth = wizzard.DateOfBirth,
+                    YearOfBirth = wizzard.YearOfBirth,
+                    ancestryId = wizzard.Ancestry.Id,
+                    eyeColourId = wizzard.EyeColour.Id,
+                    hairColourId = wizzard.HairColour.Id,
+                    wandId = wizzard.Wand.Id,
+                    patronusId = wizzard.Patronus.Id,
+                    hogwartsStudent = wizzard.HogwartsStudent,
+                    hogwartsStaff = wizzard.HogwartsStaff,
+                    actor = wizzard.Actor,
+                    alive = wizzard.Alive,
+                    image = wizzard.Image
+                });
         }
     }
 }

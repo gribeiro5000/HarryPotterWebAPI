@@ -89,6 +89,7 @@ namespace HarryPotterWebAPI.Controllers
             wizzard.EyeColour = new Colour();
             wizzard.HairColour = new Colour();
             wizzard.Patronus = new Patronus();
+            wizzard.Wand = new Wand();
 
             wizzard.Name = wizzardModel.Name;
             wizzard.Species.Identifier = wizzardModel.Species;
@@ -99,7 +100,7 @@ namespace HarryPotterWebAPI.Controllers
             wizzard.Ancestry.Identifier = wizzardModel.Ancestry;
             wizzard.EyeColour.Identifier = wizzardModel.EyeColour;
             wizzard.HairColour.Identifier = wizzardModel.HairColour;
-            //wizzard.Wand.
+            wizzard.Wand.Id = wizzardModel.Wand.Id;
             wizzard.Patronus.Identifier = wizzardModel.Patronus;
             wizzard.HogwartsStudent = wizzardModel.HogwartsStudent;
             wizzard.HogwartsStaff = wizzardModel.HogwartsStaff;
