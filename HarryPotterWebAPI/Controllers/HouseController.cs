@@ -40,5 +40,17 @@ namespace HarryPotterWebAPI.Controllers
 
             return Json(houseModel);
         }
+
+        public void Post([FromBody]HouseModel houseModel)
+        {
+            House house = new House();
+            house.Identifier = houseModel.Identifier;
+            houseRepository.Insert(house);
+        }
+
+        public void Delete(int id)
+        {
+            houseRepository.Delete(id);
+        }
     }
 }

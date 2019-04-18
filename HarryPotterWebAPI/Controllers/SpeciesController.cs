@@ -40,5 +40,17 @@ namespace HarryPotterWebAPI.Controllers
 
             return Json(speciesModel);
         }
+
+        public void Post([FromBody]SpeciesModel specieModel)
+        {
+            Species specie = new Species();
+            specie.Identifier = specieModel.Identifier;
+            speciesRepository.Insert(specie);
+        }
+
+        public void Delete(int id)
+        {
+            speciesRepository.Delete(id);
+        }
     }
 }

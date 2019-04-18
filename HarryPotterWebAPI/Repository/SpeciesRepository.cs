@@ -27,5 +27,19 @@ namespace HarryPotterWebAPI.Repository
 
             return species;
         }
+
+        public void Insert(Species specie)
+        {
+            string sqlite = @"insert into Species (Identifier) values (@speciesIdentifier);";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { speciesIdentifier = specie.Identifier });
+        }
+
+        public void Delete(int id)
+        {
+            string sqlite = @"delete from Species where Species.Id = @speciesId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { speciesId = id });
+        }
     }
 }

@@ -27,5 +27,19 @@ namespace HarryPotterWebAPI.Repository
 
             return house;
         }
+
+        public void Insert(House house)
+        {
+            string sqlite = @"insert into House (Identifier) values (@houseIdentifier);";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { houseIdentifier = house.Identifier });
+        }
+
+        public void Delete(int id)
+        {
+            string sqlite = @"delete from House where House.Id = @houseId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { houseId = id });
+        }
     }
 }

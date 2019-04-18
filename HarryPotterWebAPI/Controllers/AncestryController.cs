@@ -39,5 +39,17 @@ namespace HarryPotterWebAPI.Controllers
 
             return Json(ancestryModel);
         }
+
+        public void Post([FromBody]AncestryModel ancestryModel)
+        {
+            Ancestry ancestry = new Ancestry();
+            ancestry.Identifier = ancestryModel.Identifier;
+            ancestryRepository.Insert(ancestry);
+        }
+
+        public void Delete(int id)
+        {
+            ancestryRepository.Delete(id);
+        }
     }
 }

@@ -110,5 +110,10 @@ namespace HarryPotterWebAPI.Controllers
 
             wizzardRepository.Insert(wizzard);
         }
+
+        public void Delete(int id)
+        {
+            wizzardRepository.Delete(id);
+        }
     }
 }

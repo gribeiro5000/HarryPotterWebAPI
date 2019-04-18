@@ -220,5 +220,12 @@ namespace HarryPotterWebAPI.Repository
                     image = wizzard.Image
                 });
         }
+
+        public void Delete(int id)
+        {
+            string sqlite = @"delete from Wizzard where Wizzard.Id = @wizzardId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { wizzardId = id });
+        }
     }
 }

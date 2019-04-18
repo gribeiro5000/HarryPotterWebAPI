@@ -49,7 +49,7 @@ namespace HarryPotterWebAPI.Controllers
             return Json(wandModel);
         }
 
-        public void Post(WandModel wandModel)
+        public void Post([FromBody]WandModel wandModel)
         {
             Wand wand = new Wand();
             wand.WoodMaterial = new Material();
@@ -60,6 +60,11 @@ namespace HarryPotterWebAPI.Controllers
             wand.Length = wandModel.Length;
 
             wandRepository.Insert(wand);
+        }
+
+        public void Delete(int id)
+        {
+            wandRepository.Delete(id);
         }
     }
 }

@@ -41,5 +41,17 @@ namespace HarryPotterWebAPI.Controllers
 
             return Json(patronusModel);
         }
+
+        public void Post([FromBody]PatronusModel patronusModel)
+        {
+            Patronus patronus = new Patronus();
+            patronus.Identifier = patronusModel.Identifier;
+            patronusRepository.Insert(patronus);
+        }
+
+        public void Delete(int id)
+        {
+            patronusRepository.Delete(id);
+        }
     }
 }

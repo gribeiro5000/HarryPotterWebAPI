@@ -78,11 +78,11 @@ namespace HarryPotterWebAPI.Repository
         public void Insert(Wand wand)
         {
             string sqlite = "select * from Material where Material.Identifier = '" + wand.WoodMaterial.Identifier + "' ";
-                    sqlite += "union ";
-                    sqlite += "select* from Material where Material.Identifier = '" + wand.CoreMaterial.Identifier + "';";
+                    sqlite += " union ";
+                    sqlite += " select * from Material where Material.Identifier = '" + wand.CoreMaterial.Identifier + "';";
 
             SQLiteConnection connection = new SQLiteConnection(connectionString);
-            var wandData = connection.Query(sqlite);
+            var wandData = connection.Query(sqlite).ToList();
 
             wand.WoodMaterial.Id = Convert.ToInt32(wandData.Where(x => x.Identifier == wand.WoodMaterial.Identifier).FirstOrDefault()?.Id);
             wand.CoreMaterial.Id = Convert.ToInt32(wandData.Where(x => x.Identifier == wand.CoreMaterial.Identifier).FirstOrDefault()?.Id);
@@ -96,6 +96,13 @@ namespace HarryPotterWebAPI.Repository
                 coreMaterialId = wand.CoreMaterial.Id,
                 length = wand.Length
             });
+        }
+
+        public void Delete(int id)
+        {
+            string sqlite = @"delete from Wand where Wand.Id = @wandId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { wandId = id });
         }
     }
 }

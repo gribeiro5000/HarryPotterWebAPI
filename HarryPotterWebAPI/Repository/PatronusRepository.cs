@@ -27,5 +27,19 @@ namespace HarryPotterWebAPI.Repository
 
             return patronus;
         }
+
+        public void Insert(Patronus patronus)
+        {
+            string sqlite = @"insert into Patronus (Identifier) values (@patronusIdentifier);";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { patronusIdentifier = patronus.Identifier });
+        }
+
+        public void Delete(int id)
+        {
+            string sqlite = @"delete from Patronus where Patronus.Id = @patronusId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            connection.Execute(sqlite, new { patronusId = id });
+        }
     }
 }
