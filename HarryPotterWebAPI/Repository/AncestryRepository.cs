@@ -41,5 +41,20 @@ namespace HarryPotterWebAPI.Repository
             SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Execute(sqlite, new { ancestryId = id });
         }
+
+        public bool Update(Ancestry ancestry)
+        {
+            string sqlite = @"update Ancestry set Identifier = @ancestryIdentifier where Ancestry.Id = @ancestryId";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            try
+            {
+                connection.ExecuteScalar(sqlite, new { ancestryIdentifier = ancestry.Identifier, ancestryId = ancestry.Id });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

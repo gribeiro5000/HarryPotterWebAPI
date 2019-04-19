@@ -12,10 +12,10 @@ namespace HarryPotterWebAPI.Controllers
 {
     public class AncestryController : ApiController
     {
-        AncestryRepository ancestryRepository = new AncestryRepository();
         
         public IHttpActionResult Get()
         {
+            AncestryRepository ancestryRepository = new AncestryRepository();
             List<Ancestry> ancestrys = ancestryRepository.Get();
             List<AncestryModel> ancestryModels = new List<AncestryModel>();
             foreach(Ancestry ancestry in ancestrys)
@@ -32,6 +32,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
+            AncestryRepository ancestryRepository = new AncestryRepository();
             Ancestry ancestry = ancestryRepository.GetById(id);
             AncestryModel ancestryModel = new AncestryModel();
             ancestryModel.Id = ancestry.Id;
@@ -42,6 +43,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public void Post([FromBody]AncestryModel ancestryModel)
         {
+            AncestryRepository ancestryRepository = new AncestryRepository();
             Ancestry ancestry = new Ancestry();
             ancestry.Identifier = ancestryModel.Identifier;
             ancestryRepository.Insert(ancestry);
@@ -49,7 +51,26 @@ namespace HarryPotterWebAPI.Controllers
 
         public void Delete(int id)
         {
+            AncestryRepository ancestryRepository = new AncestryRepository();
             ancestryRepository.Delete(id);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Update([FromBody] AncestryModel ancestryModel)
+        {
+            AncestryRepository ancestryRepository = new AncestryRepository();
+            Ancestry ancestry = new Ancestry();
+            ancestry.Id = ancestryModel.Id;
+            ancestry.Identifier = ancestryModel.Identifier;
+            bool result = ancestryRepository.Update(ancestry);
+            if (result == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

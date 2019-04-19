@@ -52,5 +52,23 @@ namespace HarryPotterWebAPI.Controllers
         {
             speciesRepository.Delete(id);
         }
+
+        [HttpPut]
+        public IHttpActionResult Update([FromBody] SpeciesModel speciesModel)
+        {
+            SpeciesRepository speciesRepository = new SpeciesRepository();
+            Species species = new Species();
+            species.Id = speciesModel.Id;
+            species.Identifier = speciesModel.Identifier;
+            bool result = speciesRepository.Update(species);
+            if (result == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

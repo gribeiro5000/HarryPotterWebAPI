@@ -227,5 +227,92 @@ namespace HarryPotterWebAPI.Repository
             SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Execute(sqlite, new { wizzardId = id });
         }
+
+        public bool Update(Wizzard wizzard)
+        {
+            Wizzard _wizzard = GetById(wizzard.Id);
+
+            string sqliteUpdate = "update Wizzard set";
+            if(wizzard.Name != _wizzard.Name)
+            {
+                sqliteUpdate += " Name = @wizzardName,";
+            }
+            if (wizzard.Species != _wizzard.Species)
+            {
+                sqliteUpdate += " SpeciesId = @wizzardSpecies,";
+            }
+            if (wizzard.Wand.Id != _wizzard.Wand?.Id)
+            {
+                sqliteUpdate += " WandId = @wizzardWand,";
+            }
+            if (wizzard.Patronus != _wizzard.Patronus)
+            {
+                sqliteUpdate += " PatronusId = @wizzardPatronus,";
+            }
+            if (wizzard.HogwartsStudent != _wizzard.HogwartsStudent)
+            {
+                sqliteUpdate += " set HogwartsStudent = @wizzardHogwartsStudent,";
+            }
+            if (wizzard.HogwartsStaff != _wizzard.HogwartsStaff)
+            {
+                sqliteUpdate += " set HogwartsStaff = @wizzardHogwartsStaff,";
+            }
+            if (wizzard.Actor != _wizzard.Actor)
+            {
+                sqliteUpdate += " set Actor = @wizzardActor,";
+            }
+            if (wizzard.Alive != _wizzard.Alive)
+            {
+                sqliteUpdate += " set Alive = @wizzardAlive";
+            }
+            sqliteUpdate = sqliteUpdate.Remove(sqliteUpdate.Length - 1, 1);
+            sqliteUpdate += " where Wizzard.Id = @wizzardId;";
+
+            string sqlite = "select * from Species where Species.Identifier = '" + wizzard.Species.Identifier + "'";
+            sqlite += " UNION ";
+            sqlite += "select * from Gender where gender.Identifier = '" + wizzard.Gender.Identifier + "' ";
+            sqlite += " UNION ";
+            sqlite += "select * from House where House.Identifier = '" + wizzard.House.Identifier + "' ";
+            sqlite += " UNION ";
+            sqlite += "select * from Ancestry where Ancestry.Identifier = '" + wizzard.Ancestry.Identifier + "' ";
+            sqlite += " UNION ";
+            sqlite += "select * from colour where colour.Identifier = '" + wizzard.HairColour.Identifier + "' ";
+            sqlite += " UNION ";
+            sqlite += "select * from colour where colour.Identifier = '" + wizzard.EyeColour.Identifier + "' ";
+            sqlite += " UNION ";
+            sqlite += "select * from Patronus where Patronus.Identifier = '" + wizzard.Patronus.Identifier + "';";
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            var wizzardData = connection.Query(sqlite);
+
+            wizzard.Species.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Species.Identifier).FirstOrDefault()?.Id);
+            wizzard.Gender.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Gender.Identifier).FirstOrDefault()?.Id);
+            wizzard.House.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.House.Identifier).FirstOrDefault()?.Id);
+            wizzard.Ancestry.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Ancestry.Identifier).FirstOrDefault()?.Id);
+            wizzard.HairColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.HairColour.Identifier).FirstOrDefault()?.Id);
+            wizzard.EyeColour.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.EyeColour.Identifier).FirstOrDefault()?.Id);
+            wizzard.Patronus.Id = Convert.ToInt32(wizzardData.Where(x => x.Identifier == wizzard.Patronus.Identifier).FirstOrDefault()?.Id);
+
+            try
+            {
+                connection.Execute(sqliteUpdate,
+                    new
+                    {
+                        wizzardName = wizzard.Name,
+                        wizzardSpecies = wizzard.Species.Id,
+                        wizzardWand = wizzard.Wand.Id,
+                        wizzardPatronus = wizzard.Patronus.Id,
+                        wizzardHogwartsStudent = wizzard.HogwartsStudent,
+                        wizzardHogwartsStaff = wizzard.HogwartsStaff,
+                        wizzardActor = wizzard.Actor,
+                        wizzardAlive = wizzard.Alive,
+                        wizzardId = wizzard.Id
+                    });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

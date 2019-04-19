@@ -53,5 +53,23 @@ namespace HarryPotterWebAPI.Controllers
         {
             patronusRepository.Delete(id);
         }
+
+        [HttpPut]
+        public IHttpActionResult Update([FromBody] PatronusModel patronusModel)
+        {
+            PatronusRepository patronusRepository = new PatronusRepository();
+            Patronus patronus = new Patronus();
+            patronus.Id = patronusModel.Id;
+            patronus.Identifier = patronusModel.Identifier;
+            bool result = patronusRepository.Update(patronus);
+            if (result == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -52,5 +52,23 @@ namespace HarryPotterWebAPI.Controllers
         {
             houseRepository.Delete(id);
         }
+
+        [HttpPut]
+        public IHttpActionResult Update([FromBody] HouseModel houseModel)
+        {
+            HouseRepository houseRepository = new HouseRepository();
+            House house = new House();
+            house.Id = houseModel.Id;
+            house.Identifier = houseModel.Identifier;
+            bool result = houseRepository.Update(house);
+            if (result == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }
