@@ -4,67 +4,75 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using HarryPotterWebAPI.Repository;
 using HarryPotterWebAPI.Models;
-using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Service;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class WandController : ApiController
     {
-        WandRepository wandRepository = new WandRepository();
-
         public IHttpActionResult Get()
         {
+            WandService service = new WandService();
+            List<WandModel> wandModels = service.Get();
 
-            List<Wand> wands = wandRepository.Get();
-            List<WandModel> wandModels = new List<WandModel>();
-
-            foreach (Wand wand in wands)
+            if (wandModels.HasRows())
             {
-                WandModel wandModel = new WandModel();
-                wandModel.Id = wand.Id;
-                wandModel.CoreMaterial = wand.CoreMaterial?.Identifier;
-                wandModel.WoodMaterial = wand.WoodMaterial?.Identifier;
-                wandModel.Length = wand.Length;
-                wandModel.Wizzard = wand.Wizzard?.Name;
-
-                wandModels.Add(wandModel);
+                return Json(wandModels);
             }
-
-            return Json(wandModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById(int id)
         {
-            Wand wand = wandRepository.GetById(id);
-            WandModel wandModel = new WandModel();
+            WandService service = new WandService();
+            WandModel wandModel = service.GetById(id);
 
-            wandModel.Id = wand.Id;
-            wandModel.CoreMaterial = wand.CoreMaterial?.Identifier;
-            wandModel.WoodMaterial = wand.WoodMaterial?.Identifier;
-            wandModel.Length = wand.Length;
-            wandModel.Wizzard = wand.Wizzard.Name;
-
-            return Json(wandModel);
+            if (wandModel != null)
+            {
+                return Json(wandModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Post([FromBody]WandModel wandModel)
+        public IHttpActionResult Post([FromBody]WandModel wandModel)
         {
-            Wand wand = new Wand();
-            wand.WoodMaterial = new Material();
-            wand.CoreMaterial = new Material();
-
-            wand.CoreMaterial.Identifier = wandModel.CoreMaterial;
-            wand.WoodMaterial.Identifier = wandModel.WoodMaterial;
-            wand.Length = wandModel.Length;
-
-            wandRepository.Insert(wand);
+            WandService service = new WandService();
+            if (wandModel.WoodMaterial != null && wandModel.CoreMaterial != null)
+            {
+                if (service.Post(wandModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            wandRepository.Delete(id);
+            WandService service = new WandService();
+            if (service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

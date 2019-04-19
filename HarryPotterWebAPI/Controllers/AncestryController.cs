@@ -7,6 +7,8 @@ using System.Web.Http;
 using HarryPotterWebAPI.Repository;
 using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
+using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Helpers;
 
 namespace HarryPotterWebAPI.Controllers
 {
@@ -15,57 +17,83 @@ namespace HarryPotterWebAPI.Controllers
         
         public IHttpActionResult Get()
         {
-            AncestryRepository ancestryRepository = new AncestryRepository();
-            List<Ancestry> ancestrys = ancestryRepository.Get();
-            List<AncestryModel> ancestryModels = new List<AncestryModel>();
-            foreach(Ancestry ancestry in ancestrys)
+            AncestryService service = new AncestryService();
+            List<AncestryModel> ancestryModels = service.Get();
+
+            if (ancestryModels.HasRows())
             {
-                AncestryModel ancestryModel = new AncestryModel();
-                ancestryModel.Id = ancestry.Id;
-                ancestryModel.Identifier = ancestry.Identifier;
-
-                ancestryModels.Add(ancestryModel);
+                return Json(ancestryModels);
             }
-
-            return Json(ancestryModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById(int id)
         {
-            AncestryRepository ancestryRepository = new AncestryRepository();
-            Ancestry ancestry = ancestryRepository.GetById(id);
-            AncestryModel ancestryModel = new AncestryModel();
-            ancestryModel.Id = ancestry.Id;
-            ancestryModel.Identifier = ancestry.Identifier;
+            AncestryService service = new AncestryService();
+            AncestryModel ancestryModel = service.GetById(id);
 
-            return Json(ancestryModel);
+            if (ancestryModel != null)
+            {
+                return Json(ancestryModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Post([FromBody]AncestryModel ancestryModel)
+        public IHttpActionResult Post([FromBody]AncestryModel ancestryModel)
         {
-            AncestryRepository ancestryRepository = new AncestryRepository();
-            Ancestry ancestry = new Ancestry();
-            ancestry.Identifier = ancestryModel.Identifier;
-            ancestryRepository.Insert(ancestry);
+            AncestryService service = new AncestryService();
+            if(ancestryModel.Identifier != null)
+            {
+                if (service.Post(ancestryModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            AncestryRepository ancestryRepository = new AncestryRepository();
-            ancestryRepository.Delete(id);
+            AncestryService service = new AncestryService();
+            if (service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         public IHttpActionResult Update([FromBody] AncestryModel ancestryModel)
         {
-            AncestryRepository ancestryRepository = new AncestryRepository();
-            Ancestry ancestry = new Ancestry();
-            ancestry.Id = ancestryModel.Id;
-            ancestry.Identifier = ancestryModel.Identifier;
-            bool result = ancestryRepository.Update(ancestry);
-            if (result == true)
+            AncestryService service = new AncestryService();
+            if (ancestryModel != null || ancestryModel.Identifier != null)
             {
-                return Ok();
+                bool result = service.Update(ancestryModel);
+                if (result == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {

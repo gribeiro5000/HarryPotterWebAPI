@@ -7,6 +7,8 @@ using System.Web.Http;
 using HarryPotterWebAPI.Repository;
 using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
+using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Service;
 
 namespace HarryPotterWebAPI.Controllers
 {
@@ -15,149 +17,82 @@ namespace HarryPotterWebAPI.Controllers
         
         public IHttpActionResult Get()
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
-            List<Wizzard> wizzards = wizzardRepository.Get();
-            List<WizzardModel> wizzardModels = new List<WizzardModel>();
+            WizzardService service = new WizzardService();
+            List<WizzardModel> wizzardModels = service.Get();
 
-            foreach (Wizzard wizzard in wizzards)
+            if (wizzardModels.HasRows())
             {
-                WizzardModel wizzardModel = new WizzardModel();
-                wizzardModel.Wand = new WandModel();
-                wizzardModel.Id = wizzard.Id;
-                wizzardModel.Name = wizzard.Name;
-                wizzardModel.Species = wizzard.Species?.Identifier;
-                wizzardModel.Gender = wizzard.Gender?.Identifier;
-                wizzardModel.House = wizzard.House?.Identifier;
-                wizzardModel.DateOfBirth = wizzard.DateOfBirth;
-                wizzardModel.YearOfBirth = wizzard.YearOfBirth;
-                wizzardModel.Ancestry = wizzard.Ancestry?.Identifier;
-                wizzardModel.EyeColour = wizzard.EyeColour?.Identifier;
-                wizzardModel.HairColour = wizzard.HairColour?.Identifier;
-                wizzardModel.Wand.Id = wizzard.Wand?.Id;
-                wizzardModel.Wand.WoodMaterial = wizzard.Wand?.WoodMaterial?.Identifier;
-                wizzardModel.Wand.CoreMaterial = wizzard.Wand?.CoreMaterial?.Identifier;
-                wizzardModel.Wand.Length = wizzard.Wand?.Length;
-                wizzardModel.Patronus = wizzard.Patronus?.Identifier;
-                wizzardModel.HogwartsStudent = wizzard.HogwartsStudent;
-                wizzardModel.HogwartsStaff = wizzard.HogwartsStaff;
-                wizzardModel.Actor = wizzard.Actor;
-                wizzardModel.Alive = wizzard.Alive;
-                wizzardModel.Image = wizzard.Image;
-                
-                wizzardModels.Add(wizzardModel);
+                return Json(wizzardModels);
             }
-            return Json(wizzardModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById (int id)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
-            Wizzard wizzard = wizzardRepository.GetById(id);
-            WizzardModel wizzardModel = new WizzardModel();
-            wizzardModel.Wand = new WandModel();
+            WizzardService service = new WizzardService();
+            WizzardModel wizzardModel = service.GetById(id);
 
-            wizzardModel.Id = wizzard.Id;
-            wizzardModel.Name = wizzard.Name;
-            wizzardModel.Species = wizzard.Species?.Identifier;
-            wizzardModel.Gender = wizzard.Gender?.Identifier;
-            wizzardModel.House = wizzard.House?.Identifier;
-            wizzardModel.DateOfBirth = wizzard.DateOfBirth;
-            wizzardModel.YearOfBirth = wizzard.YearOfBirth;
-            wizzardModel.Ancestry = wizzard.Ancestry?.Identifier;
-            wizzardModel.EyeColour = wizzard.EyeColour?.Identifier;
-            wizzardModel.HairColour = wizzard.HairColour?.Identifier;
-            wizzardModel.Wand.Id = wizzard.Wand?.Id;
-            wizzardModel.Wand.WoodMaterial = wizzard.Wand?.WoodMaterial?.Identifier;
-            wizzardModel.Wand.CoreMaterial = wizzard.Wand?.CoreMaterial?.Identifier;
-            wizzardModel.Wand.Length = wizzard.Wand?.Length;
-            wizzardModel.Patronus = wizzard.Patronus?.Identifier;
-            wizzardModel.HogwartsStudent = wizzard.HogwartsStudent;
-            wizzardModel.HogwartsStaff = wizzard.HogwartsStaff;
-            wizzardModel.Actor = wizzard.Actor;
-            wizzardModel.Alive = wizzard.Alive;
-            wizzardModel.Image = wizzard.Image;
-
-            return Json(wizzardModel);
+            if (wizzardModel != null)
+            {
+                return Json(wizzardModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult Post([FromBody] WizzardModel wizzardModel)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
-            Wizzard wizzard = new Wizzard();
-            wizzard.Species = new Species();
-            wizzard.Gender = new Gender();
-            wizzard.House = new House();
-            wizzard.Ancestry = new Ancestry();
-            wizzard.EyeColour = new Colour();
-            wizzard.HairColour = new Colour();
-            wizzard.Patronus = new Patronus();
-            wizzard.Wand = new Wand();
-
-            wizzard.Name = wizzardModel.Name;
-            wizzard.Species.Identifier = wizzardModel.Species;
-            wizzard.Gender.Identifier = wizzardModel.Gender;
-            wizzard.House.Identifier = wizzardModel.House;
-            wizzard.DateOfBirth = wizzardModel.DateOfBirth;
-            wizzard.YearOfBirth = wizzardModel.YearOfBirth;
-            wizzard.Ancestry.Identifier = wizzardModel.Ancestry;
-            wizzard.EyeColour.Identifier = wizzardModel.EyeColour;
-            wizzard.HairColour.Identifier = wizzardModel.HairColour;
-            wizzard.Wand.Id = wizzardModel.Wand.Id;
-            wizzard.Patronus.Identifier = wizzardModel.Patronus;
-            wizzard.HogwartsStudent = wizzardModel.HogwartsStudent;
-            wizzard.HogwartsStaff = wizzardModel.HogwartsStaff;
-            wizzard.Actor = wizzardModel.Actor;
-            wizzard.Alive = wizzardModel.Alive;
-            wizzard.Image = wizzardModel.Image;
-
-            wizzardRepository.Insert(wizzard);
-
-            return Ok();
+            WizzardService service = new WizzardService();
+            if (wizzardModel != null)
+            {
+                if (service.Post(wizzardModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
-            wizzardRepository.Delete(id);
+            WizzardService service = new WizzardService();
+            if (service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
-        
+
         [HttpPut]
         public IHttpActionResult Update([FromBody] WizzardModel wizzardModel)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
-            Wizzard wizzard = new Wizzard();
-            wizzard.Species = new Species();
-            wizzard.Gender = new Gender();
-            wizzard.House = new House();
-            wizzard.Ancestry = new Ancestry();
-            wizzard.EyeColour = new Colour();
-            wizzard.HairColour = new Colour();
-            wizzard.Patronus = new Patronus();
-            wizzard.Wand = new Wand();
-
-            wizzard.Id = wizzardModel.Id;
-            wizzard.Name = wizzardModel.Name;
-            wizzard.Species.Identifier = wizzardModel.Species;
-            wizzard.Gender.Identifier = wizzardModel.Gender;
-            wizzard.House.Identifier = wizzardModel.House;
-            wizzard.DateOfBirth = wizzardModel.DateOfBirth;
-            wizzard.YearOfBirth = wizzardModel.YearOfBirth;
-            wizzard.Ancestry.Identifier = wizzardModel.Ancestry;
-            wizzard.EyeColour.Identifier = wizzardModel.EyeColour;
-            wizzard.HairColour.Identifier = wizzardModel.HairColour;
-            wizzard.Wand.Id = wizzardModel.Wand.Id;
-            wizzard.Patronus.Identifier = wizzardModel.Patronus;
-            wizzard.HogwartsStudent = wizzardModel.HogwartsStudent;
-            wizzard.HogwartsStaff = wizzardModel.HogwartsStaff;
-            wizzard.Actor = wizzardModel.Actor;
-            wizzard.Alive = wizzardModel.Alive;
-            wizzard.Image = wizzardModel.Image;
-
-            bool result = wizzardRepository.Update(wizzard);
-
-            if (result == true)
+            WizzardService service = new WizzardService();
+            if(wizzardModel != null || wizzardModel.Id != 0)
             {
-                return Ok();
+                bool result = service.Update(wizzardModel);
+                if (result == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {

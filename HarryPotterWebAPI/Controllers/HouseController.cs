@@ -3,67 +3,93 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
-using HarryPotterWebAPI.Repository;
+using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Helpers;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class HouseController : ApiController
     {
-        HouseRepository houseRepository = new HouseRepository();
-        
         public IHttpActionResult Get()
         {
-            List<House> houses = houseRepository.Get();
-            List<HouseModel> houseModels = new List<HouseModel>();
+            HouseService service = new HouseService();
+            List<HouseModel> houseModels = service.Get();
 
-            foreach(House house in houses)
+            if (houseModels.HasRows())
             {
-                HouseModel houseModel = new HouseModel();
-                houseModel.Id = house.Id;
-                houseModel.Identifier = house.Identifier;
-
-                houseModels.Add(houseModel);
+                return Json(houseModels);
             }
-
-            return Json(houseModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById(int id)
         {
-            House house = houseRepository.GetById(id);
-            HouseModel houseModel = new HouseModel();
+            HouseService service = new HouseService();
+            HouseModel houseModel = service.GetById(id);
 
-            houseModel.Id = house.Id;
-            houseModel.Identifier = house.Identifier;
-
-            return Json(houseModel);
+            if (houseModel != null)
+            {
+                return Json(houseModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Post([FromBody]HouseModel houseModel)
+        public IHttpActionResult Post([FromBody]HouseModel houseModel)
         {
-            House house = new House();
-            house.Identifier = houseModel.Identifier;
-            houseRepository.Insert(house);
+            HouseService service = new HouseService();
+            if (houseModel.Identifier != null)
+            {
+                if (service.Post(houseModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            houseRepository.Delete(id);
+            HouseService service = new HouseService();
+            if(service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
-
+        
         [HttpPut]
         public IHttpActionResult Update([FromBody] HouseModel houseModel)
         {
-            HouseRepository houseRepository = new HouseRepository();
-            House house = new House();
-            house.Id = houseModel.Id;
-            house.Identifier = houseModel.Identifier;
-            bool result = houseRepository.Update(house);
-            if (result == true)
+            HouseService service = new HouseService();
+            if (houseModel != null || houseModel.Identifier != null)
             {
-                return Ok();
+                bool result = service.Update(houseModel);
+                if (result == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {

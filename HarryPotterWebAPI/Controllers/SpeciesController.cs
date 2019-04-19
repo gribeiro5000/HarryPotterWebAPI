@@ -4,66 +4,93 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
-using HarryPotterWebAPI.Repository;
+using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Service;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class SpeciesController : ApiController
     {
-        SpeciesRepository speciesRepository = new SpeciesRepository();
-
         public IHttpActionResult Get()
         {
-            List<Species> speciess = speciesRepository.Get();
-            List<SpeciesModel> speciesModels = new List<SpeciesModel>();
+            SpeciesService service = new SpeciesService();
+            List<SpeciesModel> speciesModels = service.Get();
 
-            foreach (Species species in speciess)
+            if (speciesModels.HasRows())
             {
-                SpeciesModel speciesModel = new SpeciesModel();
-                speciesModel.Id = species.Id;
-                speciesModel.Identifier = species.Identifier;
-
-                speciesModels.Add(speciesModel);
+                return Json(speciesModels);
             }
-
-            return Json(speciesModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById(int id)
         {
-            Species species = speciesRepository.GetById(id);
-            SpeciesModel speciesModel = new SpeciesModel();
-            speciesModel.Id = species.Id;
-            speciesModel.Identifier = species.Identifier;
+            SpeciesService service = new SpeciesService();
+            SpeciesModel speciesModel = service.GetById(id);
 
-            return Json(speciesModel);
+            if (speciesModel != null)
+            {
+                return Json(speciesModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Post([FromBody]SpeciesModel specieModel)
+        public IHttpActionResult Post([FromBody]SpeciesModel speciesModel)
         {
-            Species specie = new Species();
-            specie.Identifier = specieModel.Identifier;
-            speciesRepository.Insert(specie);
+            SpeciesService service = new SpeciesService();
+            if (speciesModel.Identifier != null)
+            {
+                if (service.Post(speciesModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            speciesRepository.Delete(id);
+            SpeciesService service = new SpeciesService();
+            if (service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         public IHttpActionResult Update([FromBody] SpeciesModel speciesModel)
         {
-            SpeciesRepository speciesRepository = new SpeciesRepository();
-            Species species = new Species();
-            species.Id = speciesModel.Id;
-            species.Identifier = speciesModel.Identifier;
-            bool result = speciesRepository.Update(species);
-            if (result == true)
+            SpeciesService service = new SpeciesService();
+            if (speciesModel != null || speciesModel.Identifier != null)
             {
-                return Ok();
+                bool result = service.Update(speciesModel);
+                if (result == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {

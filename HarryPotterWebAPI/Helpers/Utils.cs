@@ -14,6 +14,10 @@ namespace HarryPotterWebAPI.Helpers
         public static string GetRelativeConnectionString(string conn) =>
             ConfigurationManager.ConnectionStrings["LocalConnectionString"].ConnectionString
                 .Replace("|DataDirectory|", System.IO.Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName);
-
+        
+        public static bool HasRows<T>(this List<T> genericList)
+        {
+            return genericList.Count() > 0;
+        }
     }
 }

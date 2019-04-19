@@ -4,67 +4,93 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using HarryPotterWebAPI.Repository;
 using HarryPotterWebAPI.Models;
-using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Helpers;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class PatronusController : ApiController
     {
-        PatronusRepository patronusRepository = new PatronusRepository();
-
         public IHttpActionResult Get()
         {
-            List<Patronus> patronuss = patronusRepository.Get();
-            List<PatronusModel> patronusModels = new List<PatronusModel>();
+            PatronusService service = new PatronusService();
+            List<PatronusModel> patronusModels = service.Get();
 
-            foreach (Patronus patronus in patronuss)
+            if (patronusModels.HasRows())
             {
-                PatronusModel patronusModel = new PatronusModel();
-                patronusModel.Id = patronus.Id;
-                patronusModel.Identifier = patronus.Identifier;
-
-                patronusModels.Add(patronusModel);
+                return Json(patronusModels);
             }
-
-            return Json(patronusModels);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public IHttpActionResult GetById(int id)
         {
-            Patronus patronus = patronusRepository.GetById(id);
-            PatronusModel patronusModel = new PatronusModel();
+            PatronusService service = new PatronusService();
+            PatronusModel patronusModel = service.GetById(id);
 
-            patronusModel.Id = patronus.Id;
-            patronusModel.Identifier = patronus.Identifier;
-
-            return Json(patronusModel);
+            if (patronusModel != null)
+            {
+                return Json(patronusModel);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        public void Post([FromBody]PatronusModel patronusModel)
+        public IHttpActionResult Post([FromBody]PatronusModel patronusModel)
         {
-            Patronus patronus = new Patronus();
-            patronus.Identifier = patronusModel.Identifier;
-            patronusRepository.Insert(patronus);
+            PatronusService service = new PatronusService();
+            if (patronusModel.Identifier != null)
+            {
+                if (service.Post(patronusModel) == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            patronusRepository.Delete(id);
+            PatronusService service = new PatronusService();
+            if (service.Delete(id) == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         public IHttpActionResult Update([FromBody] PatronusModel patronusModel)
         {
-            PatronusRepository patronusRepository = new PatronusRepository();
-            Patronus patronus = new Patronus();
-            patronus.Id = patronusModel.Id;
-            patronus.Identifier = patronusModel.Identifier;
-            bool result = patronusRepository.Update(patronus);
-            if (result == true)
+            PatronusService service = new PatronusService();
+            if (patronusModel != null || patronusModel.Identifier != null)
             {
-                return Ok();
+                bool result = service.Update(patronusModel);
+                if (result == true)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             else
             {
