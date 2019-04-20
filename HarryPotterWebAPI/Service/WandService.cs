@@ -5,17 +5,23 @@ using System.Web;
 using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Repository;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Service
 {
-    public class WandService
+    public class WandService : IWandService
     {
+        private readonly IWandRepository _wandRepository;
+        public WandService(WandRepository wandRepository)
+        {
+            _wandRepository = wandRepository;
+        }
+
         public List<WandModel> Get()
         {
-            WandRepository wandRepository = new WandRepository();
             try
             {
-                List<Wand> wands = wandRepository.Get();
+                List<Wand> wands = _wandRepository.Get();
                 List<WandModel> wandModels = new List<WandModel>();
 
                 foreach (Wand wand in wands)
@@ -39,10 +45,9 @@ namespace HarryPotterWebAPI.Service
 
         public WandModel GetById(int id)
         {
-            WandRepository wandRepository = new WandRepository();
             try
             {
-                Wand wand = wandRepository.GetById(id);
+                Wand wand = _wandRepository.GetById(id);
                 WandModel wandModel = new WandModel();
 
                 wandModel.Id = wand.Id;
@@ -61,7 +66,6 @@ namespace HarryPotterWebAPI.Service
 
         public bool Post(WandModel wandModel)
         {
-            WandRepository wandRepository = new WandRepository();
             try
             {
                 Wand wand = new Wand();
@@ -72,7 +76,7 @@ namespace HarryPotterWebAPI.Service
                 wand.WoodMaterial.Identifier = wandModel.WoodMaterial;
                 wand.Length = wandModel.Length;
 
-                wandRepository.Insert(wand);
+                _wandRepository.Insert(wand);
 
                 return true;
             }
@@ -84,10 +88,9 @@ namespace HarryPotterWebAPI.Service
 
         public bool Delete(int id)
         {
-            WandRepository wandRepository = new WandRepository();
             try
             {
-                wandRepository.Delete(id);
+                _wandRepository.Delete(id);
                 return true;
             }
             catch

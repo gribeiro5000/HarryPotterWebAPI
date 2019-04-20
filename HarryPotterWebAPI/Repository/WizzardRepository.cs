@@ -5,10 +5,11 @@ using System.Web;
 using HarryPotterWebAPI.Entity;
 using Dapper;
 using System.Data.SQLite;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Repository
 {
-    public class WizzardRepository : BaseRepository
+    public class WizzardRepository : BaseRepository, IWizzardRepository 
     {
         public List<Wizzard> Get()
         {
@@ -25,7 +26,7 @@ namespace HarryPotterWebAPI.Repository
                            LEFT JOIN Material m2 on Wand.CoreMaterialId = M2.Id
                            LEFT JOIN MaterialType mt2 on m2.MaterialTypeId = mt2.Id
                            LEFT JOIN patronus on wizzard.PatronusId = Patronus.Id";
-
+        
             SQLiteConnection connection = new SQLiteConnection(connectionString);
             List<Wizzard> wizzards = connection.Query<Wizzard>
                 (sqLite,
@@ -60,7 +61,7 @@ namespace HarryPotterWebAPI.Repository
                     Material coreMaterial = objects[10] as Material;
                     MaterialType mt2 = objects[11] as MaterialType;
                     Patronus patronus = objects[12] as Patronus;
-
+        
                     wizzard.Species = species;
                     wizzard.Gender = gender;
                     wizzard.House = house;
@@ -73,17 +74,17 @@ namespace HarryPotterWebAPI.Repository
                         wand.WoodMaterial = woodMaterial;
                         if (woodMaterial != null)
                             wand.WoodMaterial.MaterialType = mt1;
-
+        
                         wand.CoreMaterial = coreMaterial;
                         if (coreMaterial != null)
                             wand.CoreMaterial.MaterialType = mt2;
                     }
                     wizzard.Patronus = patronus;
-
+        
                     return wizzard;
                 },
                 splitOn: "Id,Id,Id,Id,Id,Id,Id,Id,Id,Id,Id,Id").ToList();
-
+        
             return wizzards;
         }
 

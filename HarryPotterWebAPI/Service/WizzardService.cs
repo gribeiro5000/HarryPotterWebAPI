@@ -5,17 +5,22 @@ using System.Web;
 using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Repository;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Service
 {
-    public class WizzardService
+    public class WizzardService : IWizzardService
     {
+        private readonly IWizzardRepository _wizzardRepository;
+        public WizzardService(WizzardRepository wizzardRepository)
+        {
+            _wizzardRepository = wizzardRepository;
+        }
         public List<WizzardModel> Get()
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
             try
             {
-                List<Wizzard> wizzards = wizzardRepository.Get();
+                List<Wizzard> wizzards = _wizzardRepository.Get();
                 List<WizzardModel> wizzardModels = new List<WizzardModel>();
 
                 foreach (Wizzard wizzard in wizzards)
@@ -55,10 +60,9 @@ namespace HarryPotterWebAPI.Service
 
         public WizzardModel GetById(int id)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
             try
             {
-                Wizzard wizzard = wizzardRepository.GetById(id);
+                Wizzard wizzard = _wizzardRepository.GetById(id);
                 WizzardModel wizzardModel = new WizzardModel();
                 wizzardModel.Wand = new WandModel();
 
@@ -93,7 +97,6 @@ namespace HarryPotterWebAPI.Service
 
         public bool Post(WizzardModel wizzardModel)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
             try
             {
                 Wizzard wizzard = new Wizzard();
@@ -123,7 +126,7 @@ namespace HarryPotterWebAPI.Service
                 wizzard.Alive = wizzardModel.Alive;
                 wizzard.Image = wizzardModel.Image;
 
-                wizzardRepository.Insert(wizzard);
+                _wizzardRepository.Insert(wizzard);
 
                 return true;
             }
@@ -135,10 +138,9 @@ namespace HarryPotterWebAPI.Service
 
         public bool Delete(int id)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
             try
             {
-                wizzardRepository.Delete(id);
+                _wizzardRepository.Delete(id);
                 return true;
             }
             catch
@@ -149,7 +151,6 @@ namespace HarryPotterWebAPI.Service
 
         public bool Update(WizzardModel wizzardModel)
         {
-            WizzardRepository wizzardRepository = new WizzardRepository();
             try
             {
                 Wizzard wizzard = new Wizzard();
@@ -180,7 +181,7 @@ namespace HarryPotterWebAPI.Service
                 wizzard.Alive = wizzardModel.Alive;
                 wizzard.Image = wizzardModel.Image;
 
-                wizzardRepository.Update(wizzard);
+                _wizzardRepository.Update(wizzard);
 
                 return true;
             }

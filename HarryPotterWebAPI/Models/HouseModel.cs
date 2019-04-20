@@ -5,9 +5,8 @@ using System.Web;
 
 namespace HarryPotterWebAPI.Models
 {
-    public class HouseModel
+    public class HouseModel : GenericModel
     {
-        public int Id { get; set; }
-        public string Identifier { get; set; }
+        
     }
 }

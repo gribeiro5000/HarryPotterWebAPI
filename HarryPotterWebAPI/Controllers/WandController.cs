@@ -7,15 +7,22 @@ using System.Web.Http;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Interface;
+using HarryPotterWebAPI.Repository;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class WandController : ApiController
     {
+        IWandService _service;
+        public WandController()
+        {
+            WandRepository repository = new WandRepository();
+            _service = new WandService(repository); 
+        }
         public IHttpActionResult Get()
         {
-            WandService service = new WandService();
-            List<WandModel> wandModels = service.Get();
+            List<WandModel> wandModels = _service.Get();
 
             if (wandModels.HasRows())
             {
@@ -29,8 +36,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
-            WandService service = new WandService();
-            WandModel wandModel = service.GetById(id);
+            WandModel wandModel = _service.GetById(id);
 
             if (wandModel != null)
             {
@@ -44,10 +50,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody]WandModel wandModel)
         {
-            WandService service = new WandService();
             if (wandModel.WoodMaterial != null && wandModel.CoreMaterial != null)
             {
-                if (service.Post(wandModel) == true)
+                if (_service.Post(wandModel) == true)
                 {
                     return Ok();
                 }
@@ -64,8 +69,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            WandService service = new WandService();
-            if (service.Delete(id) == true)
+            if (_service.Delete(id) == true)
             {
                 return Ok();
             }

@@ -7,15 +7,24 @@ using System.Web.Http;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Service;
 using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Interface;
+using HarryPotterWebAPI.Repository;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class PatronusController : ApiController
     {
+        IGenericService _service;
+        public PatronusController()
+        {
+            GenericRepository<Patronus> repository = new GenericRepository<Patronus>();
+            _service = new GenericService<Patronus>(repository);
+        }
+
         public IHttpActionResult Get()
         {
-            PatronusService service = new PatronusService();
-            List<PatronusModel> patronusModels = service.Get();
+            List<PatronusModel> patronusModels = _service.Get<PatronusModel>();
 
             if (patronusModels.HasRows())
             {
@@ -29,8 +38,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
-            PatronusService service = new PatronusService();
-            PatronusModel patronusModel = service.GetById(id);
+            PatronusModel patronusModel = _service.GetById<PatronusModel>(id);
 
             if (patronusModel != null)
             {
@@ -44,10 +52,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody]PatronusModel patronusModel)
         {
-            PatronusService service = new PatronusService();
             if (patronusModel.Identifier != null)
             {
-                if (service.Post(patronusModel) == true)
+                if (_service.Post(patronusModel))
                 {
                     return Ok();
                 }
@@ -65,8 +72,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            PatronusService service = new PatronusService();
-            if (service.Delete(id) == true)
+            if (_service.Delete(id))
             {
                 return Ok();
             }
@@ -79,11 +85,10 @@ namespace HarryPotterWebAPI.Controllers
         [HttpPut]
         public IHttpActionResult Update([FromBody] PatronusModel patronusModel)
         {
-            PatronusService service = new PatronusService();
             if (patronusModel != null || patronusModel.Identifier != null)
             {
-                bool result = service.Update(patronusModel);
-                if (result == true)
+                bool result = _service.Update(patronusModel);
+                if (result)
                 {
                     return Ok();
                 }

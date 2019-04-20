@@ -9,16 +9,22 @@ using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class WizzardController : ApiController
     {
-        
+        IWizzardService _service;
+        public WizzardController()
+        {
+            WizzardRepository repository = new WizzardRepository();
+            _service = new WizzardService(repository);
+        }
+
         public IHttpActionResult Get()
         {
-            WizzardService service = new WizzardService();
-            List<WizzardModel> wizzardModels = service.Get();
+            List<WizzardModel> wizzardModels = _service.Get();
 
             if (wizzardModels.HasRows())
             {
@@ -32,8 +38,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById (int id)
         {
-            WizzardService service = new WizzardService();
-            WizzardModel wizzardModel = service.GetById(id);
+            WizzardModel wizzardModel = _service.GetById(id);
 
             if (wizzardModel != null)
             {
@@ -47,10 +52,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody] WizzardModel wizzardModel)
         {
-            WizzardService service = new WizzardService();
             if (wizzardModel != null)
             {
-                if (service.Post(wizzardModel) == true)
+                if (_service.Post(wizzardModel) == true)
                 {
                     return Ok();
                 }
@@ -67,8 +71,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            WizzardService service = new WizzardService();
-            if (service.Delete(id) == true)
+            if (_service.Delete(id) == true)
             {
                 return Ok();
             }
@@ -81,10 +84,9 @@ namespace HarryPotterWebAPI.Controllers
         [HttpPut]
         public IHttpActionResult Update([FromBody] WizzardModel wizzardModel)
         {
-            WizzardService service = new WizzardService();
             if(wizzardModel != null || wizzardModel.Id != 0)
             {
-                bool result = service.Update(wizzardModel);
+                bool result = _service.Update(wizzardModel);
                 if (result == true)
                 {
                     return Ok();

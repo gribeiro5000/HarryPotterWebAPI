@@ -5,10 +5,11 @@ using System.Web;
 using Dapper;
 using HarryPotterWebAPI.Entity;
 using System.Data.SQLite;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Repository
 {
-    public class WandRepository : BaseRepository
+    public class WandRepository : BaseRepository, IWandRepository
     {
         public List<Wand> Get()
         {

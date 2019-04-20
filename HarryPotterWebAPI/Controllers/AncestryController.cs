@@ -9,16 +9,22 @@ using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Service;
 using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class AncestryController : ApiController
     {
-        
+        IGenericService _service;
+        public AncestryController()
+        {
+            GenericRepository<Ancestry> repository  = new GenericRepository<Ancestry>();
+            _service = new GenericService<Ancestry>(repository);
+        }
+
         public IHttpActionResult Get()
         {
-            GenericService<Ancestry> service = new GenericService<Ancestry>(); 
-            List<AncestryModel> ancestryModels = service.Get<AncestryModel>();
+            List<AncestryModel> ancestryModels = _service.Get<AncestryModel>();
 
             if (ancestryModels.HasRows())
             {
@@ -32,8 +38,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
-            AncestryService service = new AncestryService();
-            AncestryModel ancestryModel = service.GetById(id);
+            AncestryModel ancestryModel = _service.GetById<AncestryModel>(id);
 
             if (ancestryModel != null)
             {
@@ -47,10 +52,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody]AncestryModel ancestryModel)
         {
-            AncestryService service = new AncestryService();
             if(ancestryModel.Identifier != null)
             {
-                if (service.Post(ancestryModel) == true)
+                if (_service.Post<AncestryModel>(ancestryModel))
                 {
                     return Ok();
                 }
@@ -68,8 +72,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            AncestryService service = new AncestryService();
-            if (service.Delete(id) == true)
+            if (_service.Delete(id))
             {
                 return Ok();
             }
@@ -82,10 +85,9 @@ namespace HarryPotterWebAPI.Controllers
         [HttpPut]
         public IHttpActionResult Update([FromBody] AncestryModel ancestryModel)
         {
-            AncestryService service = new AncestryService();
             if (ancestryModel != null || ancestryModel.Identifier != null)
             {
-                bool result = service.Update(ancestryModel);
+                bool result = _service.Update<AncestryModel>(ancestryModel);
                 if (result == true)
                 {
                     return Ok();

@@ -7,15 +7,24 @@ using System.Web.Http;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Service;
+using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Interface;
+using HarryPotterWebAPI.Repository;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class SpeciesController : ApiController
     {
+        IGenericService _service;
+        public SpeciesController()
+        {
+            GenericRepository<Species> repository = new GenericRepository<Species>();
+            _service = new GenericService<Species>(repository);
+        }
+
         public IHttpActionResult Get()
         {
-            SpeciesService service = new SpeciesService();
-            List<SpeciesModel> speciesModels = service.Get();
+            List<SpeciesModel> speciesModels = _service.Get<SpeciesModel>();
 
             if (speciesModels.HasRows())
             {
@@ -29,8 +38,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
-            SpeciesService service = new SpeciesService();
-            SpeciesModel speciesModel = service.GetById(id);
+            SpeciesModel speciesModel = _service.GetById<SpeciesModel>(id);
 
             if (speciesModel != null)
             {
@@ -44,10 +52,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody]SpeciesModel speciesModel)
         {
-            SpeciesService service = new SpeciesService();
             if (speciesModel.Identifier != null)
             {
-                if (service.Post(speciesModel) == true)
+                if (_service.Post(speciesModel))
                 {
                     return Ok();
                 }
@@ -65,8 +72,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            SpeciesService service = new SpeciesService();
-            if (service.Delete(id) == true)
+            if (_service.Delete(id))
             {
                 return Ok();
             }
@@ -79,11 +85,10 @@ namespace HarryPotterWebAPI.Controllers
         [HttpPut]
         public IHttpActionResult Update([FromBody] SpeciesModel speciesModel)
         {
-            SpeciesService service = new SpeciesService();
             if (speciesModel != null || speciesModel.Identifier != null)
             {
-                bool result = service.Update(speciesModel);
-                if (result == true)
+                bool result = _service.Update(speciesModel);
+                if (result)
                 {
                     return Ok();
                 }

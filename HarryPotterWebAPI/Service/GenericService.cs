@@ -6,29 +6,34 @@ using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Repository;
 using HarryPotterWebAPI.Models;
 using AutoMapper;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Service
 {
-    public class GenericService<T> where T : Generic
+    public class GenericService<T> : IGenericService where T : Generic
     {
+        private readonly IGenericRepository<T> _genericRepository;
+        public GenericService(GenericRepository<T> genericRepository)
+        {
+            _genericRepository = genericRepository;
+        }
+
         public List<T2> Get<T2>() where T2 : GenericModel
         {
-            GenericRepository<T> genericRepository = new GenericRepository<T>();
             try
             {
-                List<T> entitys = genericRepository.Get();
+                List<T> entitys = _genericRepository.Get();
                 List<T2> models = new List<T2>();
                 foreach (T entity in entitys)
                 {
                     dynamic model = new
                     {
-                        entity.Id,
-                        entity.Identifier
+                        Id = entity.Id,
+                        Identifier = entity.Identifier
                     };
 
-                    var x = Mapper.Map<T2>(model);
-
-                    models.Add(x);
+                    T2 obj = Mapper.Map<T2>(model);
+                    models.Add(obj);
                 }
                 return models;
             }
@@ -40,23 +45,78 @@ namespace HarryPotterWebAPI.Service
 
         public T2 GetById<T2>(int id) where T2 : GenericModel
         {
-            GenericRepository<T> genericRepository = new GenericRepository<T>();
             try
             {
-                T entity = genericRepository.GetById(id);
+                T entity = _genericRepository.GetById(id);
                 dynamic model = new
                 {
                     Id = entity.Id,
                     Identifier = entity.Identifier
                 };
 
-                var x = Mapper.Map<T2>(model);
-
-                return x;
+                T2 obj = Mapper.Map<T2>(model);
+                return obj;
             }
             catch (Exception exception)
             {
                 return null;
+            }
+        }
+
+        public bool Post<T2>(T2 model) where T2 : GenericModel
+        {
+            try
+            {
+                dynamic entity = new
+                {
+                    Id = model.Id,
+                    Identifier = model.Identifier
+                };
+
+                T obj = Mapper.Map<T>(entity);
+                _genericRepository.Insert(obj);
+
+                return true;
+            }
+            catch (Exception exception)
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(int id)
+        {
+            try
+            {
+                _genericRepository.Delete(id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Update<T2>(T2 model) where T2 : GenericModel
+        {
+            Ancestry ancestry = new Ancestry();
+            try
+            {
+                dynamic entity = new
+                {
+                    Id = model.Id,
+                    Identifier = model.Identifier
+                };
+
+                T obj = Mapper.Map<T>(entity);
+
+                _genericRepository.Update(obj);
+
+                return true;
+            }
+            catch (Exception exception)
+            {
+                return false;
             }
         }
     }

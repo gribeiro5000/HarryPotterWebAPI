@@ -6,15 +6,24 @@ using System.Web.Http;
 using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Service;
 using HarryPotterWebAPI.Helpers;
+using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Interface;
+using HarryPotterWebAPI.Repository;
 
 namespace HarryPotterWebAPI.Controllers
 {
     public class HouseController : ApiController
     {
+        IGenericService _service;
+        public HouseController()
+        {
+            GenericRepository<House> repository = new GenericRepository<House>();
+            _service = new GenericService<House>(repository);
+        }
+
         public IHttpActionResult Get()
         {
-            HouseService service = new HouseService();
-            List<HouseModel> houseModels = service.Get();
+            List<HouseModel> houseModels = _service.Get<HouseModel>();
 
             if (houseModels.HasRows())
             {
@@ -28,8 +37,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult GetById(int id)
         {
-            HouseService service = new HouseService();
-            HouseModel houseModel = service.GetById(id);
+            HouseModel houseModel = _service.GetById<HouseModel>(id);
 
             if (houseModel != null)
             {
@@ -43,10 +51,9 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Post([FromBody]HouseModel houseModel)
         {
-            HouseService service = new HouseService();
             if (houseModel.Identifier != null)
             {
-                if (service.Post(houseModel) == true)
+                if (_service.Post(houseModel))
                 {
                     return Ok();
                 }
@@ -64,8 +71,7 @@ namespace HarryPotterWebAPI.Controllers
 
         public IHttpActionResult Delete(int id)
         {
-            HouseService service = new HouseService();
-            if(service.Delete(id) == true)
+            if (_service.Delete(id))
             {
                 return Ok();
             }
@@ -78,11 +84,10 @@ namespace HarryPotterWebAPI.Controllers
         [HttpPut]
         public IHttpActionResult Update([FromBody] HouseModel houseModel)
         {
-            HouseService service = new HouseService();
             if (houseModel != null || houseModel.Identifier != null)
             {
-                bool result = service.Update(houseModel);
-                if (result == true)
+                bool result = _service.Update(houseModel);
+                if (result)
                 {
                     return Ok();
                 }

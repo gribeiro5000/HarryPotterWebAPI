@@ -13,7 +13,6 @@ namespace HarryPotterWebAPI.Service
         public List<AncestryModel> Get()
         {
             GenericRepository<Ancestry> ancestryRepository = new GenericRepository<Ancestry>();
-            //AncestryRepository ancestryRepository = new AncestryRepository();
             try
             {
                 List<Ancestry> ancestrys = ancestryRepository.Get();

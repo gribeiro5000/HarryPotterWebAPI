@@ -5,9 +5,8 @@ using System.Web;
 
 namespace HarryPotterWebAPI.Models
 {
-    public class SpeciesModel
+    public class SpeciesModel : GenericModel
     {
-        public int Id { get; set; }
-        public string Identifier { get; set; }
+        
     }
 }

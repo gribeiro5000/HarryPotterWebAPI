@@ -5,10 +5,11 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Web;
 using HarryPotterWebAPI.Entity;
+using HarryPotterWebAPI.Interface;
 
 namespace HarryPotterWebAPI.Repository
 {
-    public class GenericRepository<T> : BaseRepository where T : Generic
+    public class GenericRepository<T> : BaseRepository, IGenericRepository<T> where T : Generic
     {
         public List<T> Get()
         {
