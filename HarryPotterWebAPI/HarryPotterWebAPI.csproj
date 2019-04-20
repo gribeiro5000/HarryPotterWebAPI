@@ -47,6 +47,9 @@
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
     </Reference>
@@ -70,6 +73,9 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.109.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -161,6 +167,7 @@
     <Compile Include="Entity\Ancestry.cs" />
     <Compile Include="Entity\Colour.cs" />
     <Compile Include="Entity\Gender.cs" />
+    <Compile Include="Entity\Generic.cs" />
     <Compile Include="Entity\House.cs" />
     <Compile Include="Entity\Material.cs" />
     <Compile Include="Entity\MaterialType.cs" />
@@ -173,6 +180,7 @@
     </Compile>
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Models\AncestryModel.cs" />
+    <Compile Include="Models\GenericModel.cs" />
     <Compile Include="Models\HouseModel.cs" />
     <Compile Include="Models\PatronusModel.cs" />
     <Compile Include="Models\SpeciesModel.cs" />
@@ -188,6 +196,7 @@
     <Compile Include="Repository\WandRepository.cs" />
     <Compile Include="Repository\WizzardRepository.cs" />
     <Compile Include="Service\AncestryService.cs" />
+    <Compile Include="Service\GenericService.cs" />
     <Compile Include="Service\HouseService.cs" />
     <Compile Include="Service\PatronusService.cs" />
     <Compile Include="Service\SpeciesService.cs" />

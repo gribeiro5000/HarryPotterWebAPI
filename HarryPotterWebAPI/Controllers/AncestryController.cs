@@ -17,8 +17,8 @@ namespace HarryPotterWebAPI.Controllers
         
         public IHttpActionResult Get()
         {
-            AncestryService service = new AncestryService();
-            List<AncestryModel> ancestryModels = service.Get();
+            GenericService<Ancestry> service = new GenericService<Ancestry>(); 
+            List<AncestryModel> ancestryModels = service.Get<AncestryModel>();
 
             if (ancestryModels.HasRows())
             {

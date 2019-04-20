@@ -5,9 +5,8 @@ using System.Web;
 
 namespace HarryPotterWebAPI.Entity
 {
-    public class Species
+    public class Species : Generic
     {
-        public int Id { get; set; }
-        public string Identifier { get; set; }
+       
     }
 }
