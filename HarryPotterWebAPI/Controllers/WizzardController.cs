@@ -10,9 +10,11 @@ using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Service;
 using HarryPotterWebAPI.Interface;
+using System.Web.Http.Cors;
 
 namespace HarryPotterWebAPI.Controllers
 {
+    [EnableCors("*","*","*")]
     public class WizzardController : ApiController
     {
         IWizzardService _service;
