@@ -68,9 +68,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\CascadingStyleSheets.css" />
+    <Content Include="Html\House.html" />
     <Content Include="Html\Index.html" />
+    <Content Include="Html\Wizzard.html" />
     <Content Include="images\harry-potter.jpg" />
-    <Content Include="JavaScript\JavaScript.js" />
+    <Content Include="JavaScript\JavaScript.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
