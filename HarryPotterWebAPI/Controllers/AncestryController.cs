@@ -10,9 +10,11 @@ using HarryPotterWebAPI.Models;
 using HarryPotterWebAPI.Service;
 using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Interface;
+using System.Web.Http.Cors;
 
 namespace HarryPotterWebAPI.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class AncestryController : ApiController
     {
         IGenericService _service;

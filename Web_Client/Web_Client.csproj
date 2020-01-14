@@ -68,8 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\CascadingStyleSheets.css" />
+    <Content Include="Html\Ancestry.html" />
     <Content Include="Html\House.html" />
     <Content Include="Html\Index.html" />
+    <Content Include="Html\Species.html" />
     <Content Include="Html\Wizzard.html" />
     <Content Include="images\harry-potter.jpg" />
     <Content Include="JavaScript\JavaScript.min.js" />

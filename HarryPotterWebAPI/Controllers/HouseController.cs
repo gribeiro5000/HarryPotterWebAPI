@@ -9,9 +9,11 @@ using HarryPotterWebAPI.Helpers;
 using HarryPotterWebAPI.Entity;
 using HarryPotterWebAPI.Interface;
 using HarryPotterWebAPI.Repository;
+using System.Web.Http.Cors;
 
 namespace HarryPotterWebAPI.Controllers
 {
+    [EnableCors("*","*","*")]
     public class HouseController : ApiController
     {
         IGenericService _service;
